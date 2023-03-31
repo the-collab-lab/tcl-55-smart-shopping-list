@@ -4,7 +4,7 @@ export function Home() {
 	return (
 		<div className="Home">
 			<p>
-				Hello from the home (<code>/</code>) page!
+				It all works!!!
 			</p>
 		</div>
 	);
