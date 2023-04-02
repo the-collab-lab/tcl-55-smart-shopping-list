@@ -10,6 +10,6 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 ## Mentors
 
-[Shraddha][https://github.com/5hraddha]
+[Shraddha](https://github.com/5hraddha)
 
 ## Code of Conduct Contacts
