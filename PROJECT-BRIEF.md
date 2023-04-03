@@ -20,40 +20,40 @@ Pairings will go as follows:
 
 #### Week 1, April 2 - 8
 
-1. Yao & Arianna
-2. Johnny & Katherine
+1. Yao & Ticia
+2. Jeremiah & Katherine
 
 #### Week 2, April 9 - 15
 
-1. Arianna & Johnny
+1. Ticia & Jeremiah
 2. Yao & Katherine
 
 #### Week 3, April 16 - 22
 
-1. Johnny & Yao
-2. Katherine & Arianna
+1. Jeremiah & Yao
+2. Katherine & Ticia
 
 #### Week 4, April 23 - 29
 
-1. Yao & Arianna
-2. Johnny & Katherine
+1. Yao & Ticia
+2. Jeremiah & Katherine
 
 #### Week 5, April 30 - May 6
 
-1. Arianna & Johnny
+1. Ticia & Jeremiah
 2. Yao & Katherine
 
 #### Week 6, May 7 - 13
 
-1. Johnny & Yao
-2. Katherine & Arianna
+1. Jeremiah & Yao
+2. Katherine & Ticia
 
 #### Week 7, May 14 - 20
 
-1. Yao & Arianna
-2. Johnny & Katherine
+1. Yao & Ticia
+2. Jeremiah & Katherine
 
 #### Week 8, May 21 - 27
 
-1. Arianna & Johnny
+1. Ticia & Jeremiah
 2. Yao & Katherine
