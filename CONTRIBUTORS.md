@@ -10,7 +10,7 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 ## Mentors
 
-[Shraddha](https://github.com/5hraddha)
-[Devin Jaggernauth](https://github.com/mentalcaries)
+- [Shraddha](https://github.com/5hraddha)
+- [Devin Jaggernauth](https://github.com/mentalcaries)
 
 ## Code of Conduct Contacts
