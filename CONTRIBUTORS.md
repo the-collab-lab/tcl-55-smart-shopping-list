@@ -12,5 +12,6 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 - [Shraddha](https://github.com/5hraddha)
 - [Devin Jaggernauth](https://github.com/mentalcaries)
+- [Lyle Schemmerling](https://github.com/lyleschemmerling) 🐕
 
 ## Code of Conduct Contacts
