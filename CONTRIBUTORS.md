@@ -8,6 +8,7 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 - [Jeremiah Fallin](https://github.com/jeremiahfallin)🫡
 - [Yao Jiang](https://github.com/Yaosaur) 😺
+- [Ticia Francisco](https://github.com/ticiadev) ✨
 
 ## Mentors
 
