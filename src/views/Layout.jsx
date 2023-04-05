@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import './Layout.css';
 
@@ -21,15 +22,9 @@ export function Layout() {
 					<Outlet />
 				</main>
 				<nav className="Nav">
-					<a href="#" className="Nav-link">
-						Home
-					</a>
-					<a href="#" className="Nav-link">
-						List
-					</a>
-					<a href="#" className="Nav-link">
-						Add Item
-					</a>
+					<NavLink to="/">Home</NavLink>
+					<NavLink to="/list">List</NavLink>
+					<NavLink to="/add-item">Add Item</NavLink>
 				</nav>
 			</div>
 		</>
