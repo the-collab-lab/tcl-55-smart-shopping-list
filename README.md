@@ -1,3 +1,5 @@
+i added stuff
+
 ## Overview
 
 This README file explains The Collab Lab’s smart shopping list project and provides instructions for developing it locally.
