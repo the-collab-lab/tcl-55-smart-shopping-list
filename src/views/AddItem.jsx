@@ -27,6 +27,11 @@ export function AddItem({ listId }) {
 		<form
 			onSubmit={(event) => {
 				event.preventDefault();
+				// Make sure the user has entered an item name
+				if (!itemName) {
+					setMessage('Please enter an item name');
+					return;
+				}
 
 				const result = addItem(listId, {
 					itemName,
