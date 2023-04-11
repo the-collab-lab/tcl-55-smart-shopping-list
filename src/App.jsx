@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Navigate,
+} from 'react-router-dom';
 
 import { AddItem, Home, Layout, List } from './views';
 
@@ -19,7 +24,7 @@ export function App() {
 	 * to create and join a new list.
 	 */
 	const [listToken, setListToken] = useStateWithStorage(
-		'my test list',
+		null,
 		'tcl-shopping-list-token',
 	);
 
@@ -47,11 +52,17 @@ export function App() {
 		});
 	}, [listToken]);
 
+	// const handleCreateList = () => {
+	// 	const newToken = generateToken();
+	// 	setListToken(newToken);
+	// 	navigate('/list');
+	// };
+
 	return (
 		<Router>
 			<Routes>
 				<Route path="/" element={<Layout />}>
-					<Route index element={<Home />} />
+					<Route index element={<Home handleListTokenState={setListToken} />} />
 					<Route path="/list" element={<List data={data} />} />
 					<Route path="/add-item" element={<AddItem />} />
 				</Route>
