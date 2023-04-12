@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { generateToken } from '@the-collab-lab/shopping-list-utils';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
-export function Home({ handleListTokenState }) {
+export function Home({ handleListTokenState, listToken }) {
 	const navigate = useNavigate();
 
 	const handleCreateList = () => {
@@ -10,6 +11,12 @@ export function Home({ handleListTokenState }) {
 		handleListTokenState(newToken);
 		navigate('/list');
 	};
+
+	useEffect(() => {
+		if (listToken) {
+			navigate('/list');
+		}
+	}, []);
 
 	return (
 		<div className="Home">
