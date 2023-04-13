@@ -8,7 +8,7 @@ const timeframeToDays = {
 };
 
 export function AddItem({ listId }) {
-	const [timeframe, setTimeframe] = useState('soon');
+	const [timeframe, setTimeframe] = useState('Soon');
 	const [itemName, setItemName] = useState('');
 	const [message, setMessage] = useState(null);
 
