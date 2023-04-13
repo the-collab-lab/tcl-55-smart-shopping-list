@@ -58,6 +58,7 @@ export function AddItem({ listId }) {
 				<label htmlFor="itemName">Item name:</label>
 				<input
 					type="text"
+					id="itemName"
 					name="itemName"
 					value={itemName}
 					onChange={onItemChange}
