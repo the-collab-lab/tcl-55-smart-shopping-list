@@ -61,6 +61,8 @@ export async function addItem(listId, { itemName, daysUntilNextPurchase }) {
 		dateNextPurchased: getFutureDate(daysUntilNextPurchase),
 		name: itemName,
 		totalPurchases: 0,
+	}).catch((err) => {
+		console.error(err);
 	});
 	return data;
 }
