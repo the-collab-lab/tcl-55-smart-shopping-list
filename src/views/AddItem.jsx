@@ -22,30 +22,29 @@ export function AddItem({ listId }) {
 
 	const onTimeChange = (e) => setTimeframe(e.target.value);
 	const onItemChange = (e) => setItemName(e.target.value);
+	const onFormSubmit = (e) => {
+		e.preventDefault();
+		// Make sure the user has entered an item name
+		if (!itemName) {
+			setMessage('Please enter an item name');
+			return;
+		}
+
+		const result = addItem(listId, {
+			itemName,
+			daysUntilNextPurchase: timeframeToDays[timeframe],
+		});
+		if (result) {
+			setMessage(`Added ${itemName} to your list.`);
+			setItemName('');
+			setTimeframe('Soon');
+		} else {
+			setMessage('Error adding item');
+		}
+	};
 
 	return (
-		<form
-			onSubmit={(event) => {
-				event.preventDefault();
-				// Make sure the user has entered an item name
-				if (!itemName) {
-					setMessage('Please enter an item name');
-					return;
-				}
-
-				const result = addItem(listId, {
-					itemName,
-					daysUntilNextPurchase: timeframeToDays[timeframe],
-				});
-				if (result) {
-					setMessage(`Added ${itemName} to your list.`);
-					setItemName('');
-					setTimeframe('Soon');
-				} else {
-					setMessage('Error adding item');
-				}
-			}}
-		>
+		<form onSubmit={onFormSubmit}>
 			<div
 				style={{
 					border: 'none',
