@@ -22,7 +22,7 @@ export function AddItem({ listId }) {
 
 	const onTimeChange = (e) => setTimeframe(e.target.value);
 	const onItemChange = (e) => setItemName(e.target.value);
-	const onFormSubmit = (e) => {
+	const onFormSubmit = async (e) => {
 		e.preventDefault();
 		// Make sure the user has entered an item name
 		if (!itemName) {
@@ -30,7 +30,7 @@ export function AddItem({ listId }) {
 			return;
 		}
 
-		const result = addItem(listId, {
+		const result = await addItem(listId, {
 			itemName,
 			daysUntilNextPurchase: timeframeToDays[timeframe],
 		});
@@ -39,7 +39,7 @@ export function AddItem({ listId }) {
 			setItemName('');
 			setTimeframe('Soon');
 		} else {
-			setMessage('Error adding item');
+			setMessage('Error adding item, please try again.');
 		}
 	};
 

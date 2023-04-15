@@ -52,19 +52,23 @@ export function getItemData(snapshot) {
  * @param {number} itemData.daysUntilNextPurchase The number of days until the user thinks they'll need to buy the item again.
  */
 export async function addItem(listId, { itemName, daysUntilNextPurchase }) {
-	const listCollectionRef = collection(db, listId);
-	const data = await addDoc(listCollectionRef, {
-		dateCreated: new Date(),
-		// NOTE: This is null because the item has just been created.
-		// We'll use updateItem to put a Date here when the item is purchased!
-		dateLastPurchased: null,
-		dateNextPurchased: getFutureDate(daysUntilNextPurchase),
-		name: itemName,
-		totalPurchases: 0,
-	}).catch((err) => {
-		console.error(err);
-	});
-	return data;
+	try {
+		const listCollectionRef = collection(db, listId);
+		await addDoc(listCollectionRef, {
+			dateCreated: new Date(),
+			// NOTE: This is null because the item has just been created.
+			// We'll use updateItem to put a Date here when the item is purchased!
+			dateLastPurchased: null,
+			dateNextPurchased: getFutureDate(daysUntilNextPurchase),
+			name: itemName,
+			totalPurchases: 0,
+		}).catch((error) => {
+			return error;
+		});
+	} catch (error) {
+		return false;
+	}
+	return true;
 }
 
 export async function updateItem() {
