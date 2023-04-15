@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react';
 import { addItem } from '../api/firebase';
 
-const timeframeToDays = {
-	Soon: 7,
-	'Kind of Soon': 14,
-	'Not Soon': 30,
-};
-
 export function AddItem({ listId }) {
-	const [timeframe, setTimeframe] = useState('Soon');
+	const [timeframe, setTimeframe] = useState('7');
 	const [itemName, setItemName] = useState('');
 	const [message, setMessage] = useState(null);
 
@@ -32,12 +26,12 @@ export function AddItem({ listId }) {
 
 		const result = await addItem(listId, {
 			itemName,
-			daysUntilNextPurchase: timeframeToDays[timeframe],
+			daysUntilNextPurchase: timeframe,
 		});
 		if (result) {
 			setMessage(`Added ${itemName} to your list.`);
 			setItemName('');
-			setTimeframe('Soon');
+			setTimeframe(7);
 		} else {
 			setMessage('Error adding item, please try again.');
 		}
@@ -71,16 +65,19 @@ export function AddItem({ listId }) {
 					gridTemplateColumns: '1fr 1fr',
 				}}
 			>
-				<label htmlFor="timeframe" style={{ gridColumn: 'span 2' }}>
+				<legend
+					htmlFor="timeframe"
+					style={{ padding: 0, gridColumn: 'span 2' }}
+				>
 					How soon will you buy this again?
-				</label>
+				</legend>
 
 				<input
 					type="radio"
 					name="timeframe"
-					value="Soon"
+					value={7}
 					id="soon"
-					checked={timeframe === 'Soon'}
+					checked={timeframe === '7'}
 					onChange={onTimeChange}
 				/>
 
@@ -89,9 +86,9 @@ export function AddItem({ listId }) {
 				<input
 					type="radio"
 					name="timeframe"
-					value="Kind of Soon"
+					value={14}
 					id="kindOfSoon"
-					checked={timeframe === 'Kind of Soon'}
+					checked={timeframe === '14'}
 					onChange={onTimeChange}
 				/>
 
@@ -100,9 +97,9 @@ export function AddItem({ listId }) {
 				<input
 					type="radio"
 					name="timeframe"
-					value="Not Soon"
+					value={30}
 					id="notSoon"
-					checked={timeframe === 'Not Soon'}
+					checked={timeframe === '30'}
 					onChange={onTimeChange}
 				/>
 				<label htmlFor="notSoon">Not Soon</label>
