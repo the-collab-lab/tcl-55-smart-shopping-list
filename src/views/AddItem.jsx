@@ -31,7 +31,7 @@ export function AddItem({ listId }) {
 		if (result) {
 			setMessage(`Added ${itemName} to your list.`);
 			setItemName('');
-			setTimeframe(7);
+			setTimeframe('7');
 		} else {
 			setMessage('Error adding item, please try again.');
 		}
