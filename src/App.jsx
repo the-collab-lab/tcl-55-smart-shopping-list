@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import {
-	BrowserRouter as Router,
-	Routes,
-	Route,
-	Navigate,
+	createBrowserRouter,
+	redirect,
+	RouterProvider,
 } from 'react-router-dom';
 
 import { AddItem, Home, Layout, List } from './views';
@@ -52,24 +51,35 @@ export function App() {
 		});
 	}, [listToken]);
 
-	return (
-		<Router>
-			<Routes>
-				<Route path="/" element={<Layout />}>
-					<Route
-						index
-						element={
-							listToken ? (
-								<Navigate to="/list" replace={true} />
-							) : (
-								<Home handleListTokenState={setListToken} />
-							)
-						}
-					/>
-					<Route path="/list" element={<List data={data} />} />
-					<Route path="/add-item" element={<AddItem listId={listToken} />} />
-				</Route>
-			</Routes>
-		</Router>
-	);
+	const browserRouter = createBrowserRouter([
+		{
+			path: '/',
+			element: <Layout />,
+			children: [
+				{
+					path: '/',
+					loader: () => {
+						return listToken && redirect('/list');
+					},
+					element: <Home handleListTokenState={setListToken} />,
+				},
+				{
+					path: '/list',
+					loader: () => {
+						return !listToken && redirect('/');
+					},
+					element: <List data={data} />,
+				},
+				{
+					path: '/add-item',
+					loader: () => {
+						return !listToken && redirect('/');
+					},
+					element: <AddItem />,
+				},
+			],
+		},
+	]);
+
+	return <RouterProvider router={browserRouter} />;
 }
