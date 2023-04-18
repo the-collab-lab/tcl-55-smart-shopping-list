@@ -17,6 +17,11 @@ export function Home({ handleListTokenState }) {
 				Hello from the home (<code>/</code>) page!
 			</p>
 			<button onClick={handleCreateList}>Create a new list</button>
+			<form>
+				<label htmlFor="join-list">Join an existing list</label>
+				<input type="text" id="join-list" />
+				<button type="submit">Join</button>
+			</form>
 		</div>
 	);
 }
