@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { generateToken } from '@the-collab-lab/shopping-list-utils';
-import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import { useState } from 'react';
 import { streamListItems } from '../api';
@@ -8,7 +7,6 @@ import { streamListItems } from '../api';
 export function Home({ handleListTokenState }) {
 	const [userEnteredToken, setUserEnteredToken] = useState('');
 	const [message, setMessage] = useState('');
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
