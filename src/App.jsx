@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import {
+	Route,
 	createBrowserRouter,
+	createRoutesFromElements,
 	redirect,
 	RouterProvider,
 } from 'react-router-dom';
@@ -51,35 +53,27 @@ export function App() {
 		});
 	}, [listToken]);
 
-	const browserRouter = createBrowserRouter([
-		{
-			path: '/',
-			element: <Layout />,
-			children: [
-				{
-					path: '/',
-					loader: () => {
-						return listToken && redirect('/list');
-					},
-					element: <Home handleListTokenState={setListToken} />,
-				},
-				{
-					path: '/list',
-					loader: () => {
-						return !listToken && redirect('/');
-					},
-					element: <List data={data} />,
-				},
-				{
-					path: '/add-item',
-					loader: () => {
-						return !listToken && redirect('/');
-					},
-					element: <AddItem />,
-				},
-			],
-		},
-	]);
+	const browserRouter = createBrowserRouter(
+		createRoutesFromElements(
+			<Route path="/" element={<Layout />}>
+				<Route
+					index
+					loader={() => listToken && redirect('/list')}
+					element={<Home handleListTokenState={setListToken} />}
+				/>
+				<Route
+					path="/list"
+					loader={() => !listToken && redirect('/')}
+					element={<List data={data} />}
+				/>
+				<Route
+					path="/add-item"
+					loader={() => !listToken && redirect('/')}
+					element={<AddItem listId={listToken} />}
+				/>
+			</Route>,
+		),
+	);
 
 	return <RouterProvider router={browserRouter} />;
 }
