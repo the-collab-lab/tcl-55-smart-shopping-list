@@ -25,9 +25,14 @@ export function List({ data }) {
 		setFilteredData(data);
 	};
 
+	const handleFormSubmit = (e) => e.preventDefault();
+
 	return (
 		<>
-			<form style={{ display: 'flex', gap: '1rem' }}>
+			<form
+				onSubmit={handleFormSubmit}
+				style={{ display: 'flex', gap: '1rem' }}
+			>
 				<label htmlFor="search">Filter Items</label>
 				<input
 					type="text"
