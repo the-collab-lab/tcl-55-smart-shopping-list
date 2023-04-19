@@ -7,16 +7,9 @@ export function List({ data }) {
 
 	console.log('filtered Data', filteredData);
 
-	//WIP
-	/* useEffect =
-		(() => {
-			if (!filteredData) {
-				showData(data);
-			} else {
-				showData(filteredData);
-			}
-		},
-		[]); */
+	useEffect(() => {
+		setFilteredData(data);
+	}, [data]);
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value.toLowerCase();
@@ -27,23 +20,14 @@ export function List({ data }) {
 		console.log(filteredData);
 	};
 
-	// const handleClear = (e) => {
-	// 	setSearchInput('');
-	// 	setFilteredData(data);
-	// };
-
-	// WIP
-	/* const showData = (dataSet) => {
-		dataSet.map((item) => (
-			<ul>
-				<ListItem key={item.id} name={item.name} />
-			</ul>
-		));
-	}; */
+	const handleClear = () => {
+		setSearchInput('');
+		setFilteredData(data);
+	};
 
 	return (
 		<>
-			<form>
+			<form style={{ display: 'flex', gap: '1rem' }}>
 				<label htmlFor="search">Filter Items</label>
 				<input
 					type="text"
@@ -53,9 +37,9 @@ export function List({ data }) {
 					onChange={handleSearchInput}
 					placeholder="Start typing here..."
 				></input>
-				{/* <button type="reset" onClick={handleClear}>
+				<button type="reset" name="clear" onClick={handleClear}>
 					Clear Filter
-				</button> */}
+				</button>
 			</form>
 			<ul>
 				{filteredData.map((item) => (
