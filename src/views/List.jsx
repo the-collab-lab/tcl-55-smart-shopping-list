@@ -12,10 +12,12 @@ export function List({ data }) {
 	}, [data]);
 
 	const handleSearchInput = (e) => {
-		const text = e.target.value.toLowerCase();
+		const text = e.target.value;
 		setSearchInput(text);
 		setFilteredData(
-			data.filter((item) => item.name.toLowerCase().includes(text)),
+			data.filter((item) =>
+				item.name.toLowerCase().includes(text.toLowerCase()),
+			),
 		);
 		console.log(filteredData);
 	};
