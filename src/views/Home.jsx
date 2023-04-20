@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { generateToken } from '@the-collab-lab/shopping-list-utils';
-import './Home.css';
 import { useState } from 'react';
+import { generateToken } from '@the-collab-lab/shopping-list-utils';
 import { streamListItems } from '../api';
+import './Home.css';
 
 export function Home({ handleListTokenState }) {
 	const [userEnteredToken, setUserEnteredToken] = useState('');
