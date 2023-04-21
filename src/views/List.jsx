@@ -44,9 +44,11 @@ export function List({ data }) {
 					onChange={handleSearchInput}
 					placeholder="Start typing here..."
 				></input>
-				<button type="reset" name="clear" onClick={handleClear}>
-					Clear Filter
-				</button>
+				{searchInput.length > 0 ? (
+					<button type="reset" name="clear" onClick={handleClear}>
+						Clear Filter
+					</button>
+				) : null}
 			</form>
 			<ul>
 				{filteredData.map((item) => (
