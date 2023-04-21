@@ -5,8 +5,6 @@ export function List({ data }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [filteredData, setFilteredData] = useState([]);
 
-	console.log('filtered Data', filteredData);
-
 	useEffect(() => {
 		setFilteredData(data);
 	}, [data]);
@@ -19,7 +17,6 @@ export function List({ data }) {
 				item.name.toLowerCase().includes(text.toLowerCase()),
 			),
 		);
-		console.log(filteredData);
 	};
 
 	const handleClear = () => {
