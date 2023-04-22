@@ -24,6 +24,9 @@ export function Home({ handleListTokenState }) {
 	const handleChange = (e) => setUserEnteredToken(e.target.value);
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
+		if (userEnteredToken.length === 0) {
+			return setMessage('Please enter a token.');
+		}
 		streamListItems(userEnteredToken, (snapshot) => {
 			if (snapshot.empty) {
 				setMessage('List not found. Please try another token.');
