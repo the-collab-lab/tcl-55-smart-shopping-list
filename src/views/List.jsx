@@ -51,7 +51,6 @@ export function List({ data }) {
 					</button>
 				</section>
 			)}
-
 			{trueData.length !== 0 && (
 				<form
 					onSubmit={handleFormSubmit}
