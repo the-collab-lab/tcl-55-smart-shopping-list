@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { generateToken } from '@the-collab-lab/shopping-list-utils';
-import { streamListItems } from '../api';
+import { streamListItems, addItem } from '../api';
 import './Home.css';
 
 export function Home({ handleListTokenState }) {
@@ -16,9 +16,18 @@ export function Home({ handleListTokenState }) {
 		return () => clearTimeout(timer);
 	}, [message]);
 
-	const handleCreateList = () => {
+	const handleCreateList = async () => {
 		const newToken = generateToken();
-		handleListTokenState(newToken);
+
+		const placeholder = await addItem(newToken, {
+			itemName: null,
+			daysUntilNextPurchase: '0',
+		});
+		if (placeholder) {
+			handleListTokenState(newToken);
+		} else {
+			setMessage('Error adding empty list to Firebase');
+		}
 	};
 
 	const handleChange = (e) => setUserEnteredToken(e.target.value);
@@ -50,6 +59,7 @@ export function Home({ handleListTokenState }) {
 				Hello from the home (<code>/</code>) page!
 			</p>
 			<button onClick={handleCreateList}>Create a new list</button>
+
 			<p>or</p>
 			<form
 				onSubmit={handleFormSubmit}
