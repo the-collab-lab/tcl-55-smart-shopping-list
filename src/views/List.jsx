@@ -8,6 +8,8 @@ export function List({ data }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [filteredData, setFilteredData] = useState([]);
 
+	const trueData = data.filter((item) => item.name !== null);
+
 	useEffect(() => {
 		setFilteredData(data);
 	}, [data]);
@@ -16,7 +18,7 @@ export function List({ data }) {
 		const text = e.target.value;
 		setSearchInput(text);
 		setFilteredData(
-			data.filter((item) =>
+			trueData.filter((item) =>
 				item.name.toLowerCase().includes(text.toLowerCase()),
 			),
 		);
@@ -24,7 +26,7 @@ export function List({ data }) {
 
 	const handleClear = () => {
 		setSearchInput('');
-		setFilteredData(data);
+		setFilteredData(trueData);
 	};
 
 	const handleFormSubmit = (e) => e.preventDefault();
@@ -35,7 +37,7 @@ export function List({ data }) {
 
 	return (
 		<>
-			{data.length === 0 && (
+			{trueData.length === 0 && (
 				<section
 					style={{
 						display: 'flex',
@@ -50,7 +52,7 @@ export function List({ data }) {
 				</section>
 			)}
 
-			{data.length !== 0 && (
+			{trueData.length !== 0 && (
 				<form
 					onSubmit={handleFormSubmit}
 					style={{ display: 'flex', gap: '1rem' }}
