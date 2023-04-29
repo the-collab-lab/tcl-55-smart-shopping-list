@@ -15,11 +15,11 @@ export function ListItem({ item, listId }) {
 		<li className="ListItem">
 			<input
 				type="checkbox"
-				id="mark-purchased"
+				id={`mark-${name}-purchased-id-${id}`}
 				onChange={handlePurchase}
 				checked={isWithinLastDay(item.dateLastPurchased)}
 			/>
-			<label htmlFor="mark-purchased">{name}</label>
+			<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
 		</li>
 	);
 }
