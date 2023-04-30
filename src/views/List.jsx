@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListItem } from '../components';
 
-export function List({ data }) {
-	const navigate = useNavigate();
 
+export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [filteredData, setFilteredData] = useState([]);
 
@@ -72,7 +71,7 @@ export function List({ data }) {
 			)}
 			<ul>
 				{filteredData.map((item) => (
-					<ListItem key={item.id} name={item.name} />
+					<ListItem key={item.id} listId={listId} item={item} />
 				))}
 			</ul>
 		</>
