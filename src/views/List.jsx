@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ListItem } from '../components';
 
-export function List({ data }) {
+export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [filteredData, setFilteredData] = useState([]);
 
@@ -49,7 +49,7 @@ export function List({ data }) {
 			</form>
 			<ul>
 				{filteredData.map((item) => (
-					<ListItem key={item.id} name={item.name} />
+					<ListItem key={item.id} listId={listId} item={item} />
 				))}
 			</ul>
 		</>
