@@ -2,12 +2,14 @@ import {
 	addDoc,
 	collection,
 	doc,
+	getDoc,
 	increment,
 	onSnapshot,
 	updateDoc,
 } from 'firebase/firestore';
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 import { db } from './config';
-import { getFutureDate } from '../utils';
+import { getDaysBetweenDates, getFutureDate } from '../utils';
 
 /**
  * Subscribe to changes on a specific list in the Firestore database (listId), and run a callback (handleSuccess) every time a change happens.
@@ -80,11 +82,38 @@ export async function addItem(listId, { itemName, daysUntilNextPurchase }) {
 
 export async function updateItem(listId, itemId) {
 	const docRef = doc(db, listId, itemId);
+	// We need to use some data from the document for our future purchase estimates.
+	const docSnap = await getDoc(docRef);
+	const today = new Date();
 
-	await updateDoc(docRef, {
-		dateLastPurchased: new Date(),
-		totalPurchases: increment(1),
-	});
+	if (docSnap.exists()) {
+		const data = docSnap.data();
+		// If the user has never purchased this item before, we'll use the date
+		// it was created as the date of the last purchase.
+		const daysBetweenPurchases = getDaysBetweenDates(
+			data.dateLastPurchased?.toDate() ?? data.dateCreated.toDate(),
+			today,
+		);
+		// If the user has never purchased this item before then we will pass
+		// in an undefined value and previousEstimate will return 14 days, the
+		// default used in calculateEstimate.
+		const previousEstimate = getDaysBetweenDates(
+			data.dateLastPurchased?.toDate(),
+			data.dateNextPurchased.toDate(),
+		);
+		const newEstimateDate = getFutureDate(
+			calculateEstimate(
+				previousEstimate,
+				daysBetweenPurchases,
+				data.totalPurchases,
+			),
+		);
+		await updateDoc(docRef, {
+			dateLastPurchased: today,
+			dateNextPurchased: newEstimateDate,
+			totalPurchases: increment(1),
+		});
+	}
 }
 
 export async function deleteItem() {
