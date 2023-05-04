@@ -1,39 +1,79 @@
 import { useEffect, useState } from 'react';
 import { addItem } from '../api/firebase';
 
-export function AddItem({ listId }) {
+function validateItemInput(data, trimmedItemName) {
+	// 1- checks for empty inputs
+
+	if (!trimmedItemName) {
+		return ['Please enter an item name.'];
+	}
+
+	const errArray = [];
+
+	// 2- checks for invalid characters
+
+	if (trimmedItemName.search(/[^a-z0-9'&-\s]/i) !== -1) {
+		errArray.push(
+			`Please enter an item name that is alphanumeric or includes ', -, and &.`,
+		);
+	}
+
+	const normalizedItemName = trimmedItemName
+		.replace(/[^a-z0-9'&-]/gi, '')
+		.toLowerCase();
+
+	const potentialMatch = data.find(
+		(item) =>
+			item.name.replaceAll(' ', '').toLowerCase() === normalizedItemName,
+	);
+
+	// 3- checks for potential match including exact match and match after removing special characters and spaces
+
+	if (potentialMatch) {
+		errArray.push(
+			`${trimmedItemName} is already on your list as ${potentialMatch.name}.`,
+		);
+	}
+
+	return errArray;
+}
+
+export function AddItem({ data, listId }) {
 	const [timeframe, setTimeframe] = useState('7');
 	const [itemName, setItemName] = useState('');
-	const [message, setMessage] = useState(null);
+	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			setMessage(null);
+			setMessages([]);
 		}, 3000);
 
 		return () => clearTimeout(timer);
-	}, [message]);
+	}, [messages]);
 
 	const onTimeChange = (e) => setTimeframe(e.target.value);
 	const onItemChange = (e) => setItemName(e.target.value);
+
 	const onFormSubmit = async (e) => {
 		e.preventDefault();
-		// Make sure the user has entered an item name
-		if (!itemName) {
-			setMessage('Please enter an item name');
+		const trimmedItemName = itemName.trim();
+
+		const errArray = validateItemInput(data, trimmedItemName);
+		if (errArray.length) {
+			setMessages(errArray);
 			return;
 		}
 
 		const result = await addItem(listId, {
-			itemName,
+			itemName: trimmedItemName,
 			daysUntilNextPurchase: timeframe,
 		});
 		if (result) {
-			setMessage(`Added ${itemName} to your list.`);
+			setMessages([`Added ${trimmedItemName} to your list.`]);
 			setItemName('');
 			setTimeframe('7');
 		} else {
-			setMessage('Error adding item, please try again.');
+			setMessages(['Error adding item, please try again.']);
 		}
 	};
 
@@ -80,7 +120,6 @@ export function AddItem({ listId }) {
 					checked={timeframe === '7'}
 					onChange={onTimeChange}
 				/>
-
 				<label htmlFor="soon">Soon</label>
 
 				<input
@@ -93,7 +132,6 @@ export function AddItem({ listId }) {
 				/>
 
 				<label htmlFor="kindOfSoon">Kind of Soon</label>
-
 				<input
 					type="radio"
 					name="timeframe"
@@ -105,7 +143,9 @@ export function AddItem({ listId }) {
 				<label htmlFor="notSoon">Not Soon</label>
 			</fieldset>
 			<button type="submit">Add Item</button>
-			{message && <p>{message}</p>}
+
+			{messages.length > 0 &&
+				messages.map((msg, index) => <p key={index}>{msg}</p>)}
 		</form>
 	);
 }

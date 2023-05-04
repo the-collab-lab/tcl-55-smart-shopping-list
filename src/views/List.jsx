@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListItem } from '../components';
 
-
 export function List({ data, listId }) {
+	const navigate = useNavigate();
 	const [searchInput, setSearchInput] = useState('');
 	const [filteredData, setFilteredData] = useState([]);
 
