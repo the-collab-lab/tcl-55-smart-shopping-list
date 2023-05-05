@@ -3,7 +3,7 @@ import {
 	Route,
 	createBrowserRouter,
 	createRoutesFromElements,
-	redirect,
+	Navigate,
 	RouterProvider,
 } from 'react-router-dom';
 
@@ -58,18 +58,29 @@ export function App() {
 			<Route path="/" element={<Layout />}>
 				<Route
 					index
-					loader={() => listToken && redirect('/list')}
-					element={<Home handleListTokenState={setListToken} />}
+					element={
+						!listToken ? (
+							<Home handleListTokenState={setListToken} />
+						) : (
+							<Navigate to="/list" />
+						)
+					}
 				/>
 				<Route
 					path="/list"
-					loader={() => !listToken && redirect('/')}
-					element={<List data={data} listId={listToken} />}
+					element={
+						listToken ? (
+							<List data={data} listId={listToken} />
+						) : (
+							<Navigate to="/" />
+						)
+					}
 				/>
 				<Route
 					path="/add-item"
-					loader={() => !listToken && redirect('/')}
-					element={<AddItem listId={listToken} />}
+					element={
+						listToken ? <AddItem listId={listToken} /> : <Navigate to="/" />
+					}
 				/>
 			</Route>,
 		),
