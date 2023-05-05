@@ -1,43 +1,6 @@
 import { useEffect, useState } from 'react';
 import { addItem } from '../api/firebase';
 
-function validateItemInput(data, trimmedItemName) {
-	// 1- checks for empty inputs
-
-	if (!trimmedItemName) {
-		return ['Please enter an item name.'];
-	}
-
-	const errArray = [];
-
-	// 2- checks for invalid characters
-
-	if (trimmedItemName.search(/[^a-z0-9'&-\s]/i) !== -1) {
-		errArray.push(
-			`Please enter an item name that is alphanumeric or includes ', -, and &.`,
-		);
-	}
-
-	const normalizedItemName = trimmedItemName
-		.replace(/[^a-z0-9'&-]/gi, '')
-		.toLowerCase();
-
-	const potentialMatch = data.find(
-		(item) =>
-			item.name.replaceAll(' ', '').toLowerCase() === normalizedItemName,
-	);
-
-	// 3- checks for potential match including exact match and match after removing special characters and spaces
-
-	if (potentialMatch) {
-		errArray.push(
-			`${trimmedItemName} is already on your list as ${potentialMatch.name}.`,
-		);
-	}
-
-	return errArray;
-}
-
 export function AddItem({ data, listId }) {
 	const [timeframe, setTimeframe] = useState('7');
 	const [itemName, setItemName] = useState('');
@@ -53,6 +16,44 @@ export function AddItem({ data, listId }) {
 
 	const onTimeChange = (e) => setTimeframe(e.target.value);
 	const onItemChange = (e) => setItemName(e.target.value);
+
+	// function to validate itemName input that returns error messages if any - called onFormSubmit
+	function validateItemInput(data, trimmedItemName) {
+		// 1- checks for empty inputs
+
+		if (!trimmedItemName) {
+			return ['Please enter an item name.'];
+		}
+
+		const errArray = [];
+
+		// 2- checks for invalid characters
+
+		if (trimmedItemName.search(/[^a-z0-9'&-\s]/i) !== -1) {
+			errArray.push(
+				`Please enter an item name that is alphanumeric or includes ', -, and &.`,
+			);
+		}
+
+		const normalizedItemName = trimmedItemName
+			.replace(/[^a-z0-9'&-]/gi, '')
+			.toLowerCase();
+
+		const potentialMatch = data.find(
+			(item) =>
+				item.name.replaceAll(' ', '').toLowerCase() === normalizedItemName,
+		);
+
+		// 3- checks for potential match including exact match and match after removing special characters and spaces
+
+		if (potentialMatch) {
+			errArray.push(
+				`${trimmedItemName} is already on your list as ${potentialMatch.name}.`,
+			);
+		}
+
+		return errArray;
+	}
 
 	const onFormSubmit = async (e) => {
 		e.preventDefault();
@@ -145,7 +146,9 @@ export function AddItem({ data, listId }) {
 			<button type="submit">Add Item</button>
 
 			{messages.length > 0 &&
-				messages.map((msg, index) => <p key={index}>{msg}</p>)}
+				messages.map((msg, index) => (
+					<p key={`error-message-${index}`}>{msg}</p>
+				))}
 		</form>
 	);
 }
