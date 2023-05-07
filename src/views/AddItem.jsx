@@ -31,7 +31,7 @@ export function AddItem({ data, listId }) {
 
 		if (trimmedItemName.search(/[^a-z0-9'&-\s]/i) !== -1) {
 			errArray.push(
-				`Please enter an item name that is alphanumeric or includes ', -, and &.`,
+				`Invalid item name entered. Please only use alphanumeric, ', -, or & characters in your item name.`,
 			);
 		}
 
