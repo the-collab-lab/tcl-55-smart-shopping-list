@@ -69,7 +69,7 @@ export function App() {
 				<Route
 					path="/add-item"
 					loader={() => !listToken && redirect('/')}
-					element={<AddItem listId={listToken} />}
+					element={<AddItem data={data} listId={listToken} />}
 				/>
 			</Route>,
 		),
