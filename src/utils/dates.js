@@ -3,7 +3,7 @@ const ONE_DAY_IN_MILLISECONDS = 86400000;
 export function getDaysBetweenDates(date1, date2) {
 	// If either date is undefined, return 14 days. This happens when the user
 	// has just created an item and hasn't purchased it yet.
-	if (date1 === undefined || date2 === undefined) {
+	if (date1?.getTime() === undefined || date2?.getTime() === undefined) {
 		return undefined;
 	}
 	const date1Milliseconds = date1.getTime();
