@@ -7,7 +7,7 @@ export function ListItem({ item, listId }) {
 
 	const handlePurchase = async (e) => {
 		if (e.target.checked) {
-			await updateItem(listId, id);
+			await updateItem(listId, item);
 		}
 	};
 
