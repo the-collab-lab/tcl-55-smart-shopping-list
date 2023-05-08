@@ -81,15 +81,22 @@ export async function addItem(listId, { itemName, daysUntilNextPurchase }) {
 }
 
 export async function updateItem(listId, item) {
-	const docRef = doc(db, listId, item.id);
+	const {
+		id,
+		dateCreated,
+		dateLastPurchased,
+		dateNextPurchased,
+		totalPurchases,
+	} = item;
+	const docRef = doc(db, listId, id);
 	// We need to use some data from the document for our future purchase estimates.
 	const today = new Date();
-	const totalPurchases = item.totalPurchases + 1;
+	const newTotalPurchases = totalPurchases + 1;
 
 	// If the user has never purchased this item before, we'll use the date
 	// it was created as the date of the last purchase.
 	const daysBetweenPurchases = getDaysBetweenDates(
-		item.dateLastPurchased?.toDate() ?? item.dateCreated.toDate(),
+		dateLastPurchased?.toDate() ?? dateCreated.toDate(),
 		today,
 	);
 
@@ -97,11 +104,15 @@ export async function updateItem(listId, item) {
 	// in an undefined value and previousEstimate will return undefined,
 	// which calculateEstimate will change to 14.
 	const previousEstimate = getDaysBetweenDates(
-		item.dateLastPurchased?.toDate(),
-		item.dateNextPurchased.toDate(),
+		dateLastPurchased?.toDate(),
+		dateNextPurchased.toDate(),
 	);
 	const newEstimateDate = getFutureDate(
-		calculateEstimate(previousEstimate, daysBetweenPurchases, totalPurchases),
+		calculateEstimate(
+			previousEstimate,
+			daysBetweenPurchases,
+			newTotalPurchases,
+		),
 	);
 	await updateDoc(docRef, {
 		dateLastPurchased: today,
