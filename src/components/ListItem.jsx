@@ -11,6 +11,8 @@ export function ListItem({ item, listId }) {
 		}
 	};
 
+	//TODO: Delete item feature
+
 	return (
 		<li className="ListItem">
 			<input
