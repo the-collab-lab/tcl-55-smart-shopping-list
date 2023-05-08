@@ -25,6 +25,7 @@ export function ListItem({ item, listId, handleDeleteItem }) {
 				name="delete"
 				onClick={handleDeleteItem}
 				value={item.id}
+				style={{ marginLeft: '.5rem' }}
 			>
 				Delete
 			</button>

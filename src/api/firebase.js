@@ -129,6 +129,6 @@ export async function deleteItem(listId, item) {
 	 * this function must accept!
 	 */
 	await deleteDoc(doc(db, listId, item))
-		.then((res) => console.log('Item deleted'))
+		.then(() => console.log('Item deleted'))
 		.catch((err) => console.error(err));
 }
