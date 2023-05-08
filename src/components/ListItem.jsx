@@ -20,7 +20,12 @@ export function ListItem({ item, listId, handleDeleteItem }) {
 				checked={isWithinLastDay(item.dateLastPurchased)}
 			/>
 			<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
-			<button type="button" name="delete" onClick={handleDeleteItem}>
+			<button
+				type="button"
+				name="delete"
+				onClick={handleDeleteItem}
+				value={item.id}
+			>
 				Delete
 			</button>
 		</li>

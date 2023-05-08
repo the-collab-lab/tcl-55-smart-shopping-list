@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListItem } from '../components';
+import { deleteItem } from '../api/firebase';
 
 export function List({ data, listId }) {
 	const navigate = useNavigate();
@@ -32,9 +33,10 @@ export function List({ data, listId }) {
 		navigate('/add-item');
 	};
 
-	const handleDeleteItem = () => {
+	const handleDeleteItem = (e) => {
+		const item = e.target.value;
 		if (window.confirm('Are you sure you want to delete this item?')) {
-			console.log('Calling api function to delete...');
+			deleteItem(listId, item);
 		}
 	};
 
