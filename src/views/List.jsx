@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
+	const navigate = useNavigate();
 	const [searchInput, setSearchInput] = useState('');
 	const navigate = useNavigate();
 
