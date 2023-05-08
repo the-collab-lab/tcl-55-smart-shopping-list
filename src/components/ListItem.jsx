@@ -2,7 +2,7 @@ import { updateItem } from '../api/firebase';
 import { isWithinLastDay } from '../utils/dates';
 import './ListItem.css';
 
-export function ListItem({ item, listId }) {
+export function ListItem({ item, listId, handleDeleteItem }) {
 	const { id, name } = item;
 
 	const handlePurchase = async (e) => {
@@ -10,8 +10,6 @@ export function ListItem({ item, listId }) {
 			await updateItem(listId, item);
 		}
 	};
-
-	//TODO: Delete item feature
 
 	return (
 		<li className="ListItem">
@@ -22,6 +20,9 @@ export function ListItem({ item, listId }) {
 				checked={isWithinLastDay(item.dateLastPurchased)}
 			/>
 			<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
+			<button type="button" name="delete" onClick={handleDeleteItem}>
+				Delete
+			</button>
 		</li>
 	);
 }

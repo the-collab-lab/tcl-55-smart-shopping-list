@@ -32,6 +32,12 @@ export function List({ data, listId }) {
 		navigate('/add-item');
 	};
 
+	const handleDeleteItem = () => {
+		if (window.confirm('Are you sure you want to delete this item?')) {
+			console.log('Calling api function to delete...');
+		}
+	};
+
 	return (
 		<>
 			{data.length === 0 && (
@@ -71,7 +77,12 @@ export function List({ data, listId }) {
 			)}
 			<ul>
 				{filteredData.map((item) => (
-					<ListItem key={item.id} listId={listId} item={item} />
+					<ListItem
+						key={item.id}
+						listId={listId}
+						item={item}
+						handleDeleteItem={handleDeleteItem}
+					/>
 				))}
 			</ul>
 		</>
