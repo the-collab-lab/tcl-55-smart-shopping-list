@@ -25,7 +25,9 @@ export function List({ data, listId }) {
 
 	const filterItem = (item, urgency) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
-			return <ListItem listId={listId} item={item} urgency={urgency} />;
+			return (
+				<ListItem key={item.id} listId={listId} item={item} urgency={urgency} />
+			);
 		}
 
 		return [];

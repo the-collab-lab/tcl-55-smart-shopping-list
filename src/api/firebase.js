@@ -2,7 +2,6 @@ import {
 	addDoc,
 	collection,
 	doc,
-	getDoc,
 	increment,
 	onSnapshot,
 	updateDoc,
@@ -108,8 +107,6 @@ export function comparePurchaseUrgency(data) {
 	for (let category in categorizedItems) {
 		categorizedItems[category].sort(sortItems);
 	}
-
-	console.log(categorizedItems);
 
 	return categorizedItems;
 }
