@@ -28,10 +28,6 @@ export function ListItem({ item, listId, urgency }) {
 				checked={isWithinLastDay(item.dateLastPurchased)}
 				style={{
 					backgroundColor: urgencyColors[urgency],
-					// "input[type='checkbox']:checked": {
-					// 	opacity: '1',
-					// 	backgroundColor: 'green',
-					// },
 				}}
 			/>
 			<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
