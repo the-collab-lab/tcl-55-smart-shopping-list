@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListItem } from '../components';
-import { deleteItem } from '../api/firebase';
 
 export function List({ data, listId }) {
 	const navigate = useNavigate();
 	const [searchInput, setSearchInput] = useState('');
-	const navigate = useNavigate();
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value;
@@ -23,19 +21,12 @@ export function List({ data, listId }) {
 		navigate('/add-item');
 	};
 
-	const handleDeleteItem = (e) => {
-		const item = e.target.value;
-		if (window.confirm('Are you sure you want to delete this item?')) {
-			deleteItem(listId, item);
-		}
-
 	const filterItem = (item) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
 			return <ListItem key={item.id} listId={listId} item={item} />;
 		}
 
 		return [];
-
 	};
 
 	return (

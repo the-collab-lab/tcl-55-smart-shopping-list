@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { updateItem } from '../api/firebase';
+import { updateItem, deleteItem } from '../api/firebase';
 import { isWithinLastDay } from '../utils/dates';
 import './ListItem.css';
+import { ListItemDetails } from './ListItemDetails';
 
-export function ListItem({ item, listId, handleDeleteItem }) {
+export function ListItem({ item, listId }) {
 	const [showDetails, setShowDetails] = useState(false);
-	const { id, name, totalPurchases } = item;
+	const { id, name, dateLastPurchased, dateNextPurchased, totalPurchases } =
+		item;
 
-	//TODO: get purchase date data from firestore
-	/* const lastPurchasedDate = item.dateLastPurchased.toDate();
-	const nextPurchasedDate = item.dateNextPurchased.toDate(); */
+	const lastPurchasedDate = dateLastPurchased?.toDate().toDateString();
+	const nextPurchasedDate = dateNextPurchased?.toDate().toDateString();
 
 	const handlePurchase = async (e) => {
 		if (e.target.checked) {
@@ -19,7 +20,15 @@ export function ListItem({ item, listId, handleDeleteItem }) {
 
 	const handleShowDetails = () => {
 		setShowDetails(!showDetails);
-		console.log(item);
+	};
+
+	const handleDeleteItem = async () => {
+		if (window.confirm('Are you sure you want to delete this item?')) {
+			const result = await deleteItem(listId, id);
+			if (result) {
+				alert(`${name} has successfully been deleted!`);
+			} else alert(`Error deleting ${name}, please try again.`);
+		}
 	};
 
 	return (
@@ -44,18 +53,17 @@ export function ListItem({ item, listId, handleDeleteItem }) {
 					type="button"
 					name="delete"
 					onClick={handleDeleteItem}
-					value={item.id}
 					style={{ marginLeft: '.5rem' }}
 				>
 					Delete
 				</button>
 			</li>
 			{showDetails && (
-				<div>
-					{/* <p>Last purchased: {dateLastPurchased}</p>
-					<p>Next purchased: {dateNextPurchased}</p> */}
-					<p>You have purchased this item {totalPurchases} times</p>
-				</div>
+				<ListItemDetails
+					totalPurchases={totalPurchases}
+					lastPurchasedDate={lastPurchasedDate}
+					nextPurchasedDate={nextPurchasedDate}
+				/>
 			)}
 		</>
 	);
