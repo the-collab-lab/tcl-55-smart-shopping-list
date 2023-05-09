@@ -55,6 +55,65 @@ export function getItemData(snapshot) {
 		.filter((item) => item.name !== null);
 }
 
+export function comparePurchaseUrgency(data) {
+	function sortItems(item1, item2) {
+		if (item1.daysUntilPurchase < item2.daysUntilPurchase) {
+			return -1;
+		} else if (item1.daysUntilPurchase > item2.daysUntilPurchase) {
+			return 1;
+		}
+		if (item1.name < item2.name) {
+			return -1;
+		}
+		return 0;
+	}
+
+	const today = new Date();
+	const soon = [];
+	const kindOfSoon = [];
+	const notSoon = [];
+	const inactive = [];
+	const overdue = [];
+
+	data.forEach((item) => {
+		const daysUntilNextPurchase = getDaysBetweenDates(
+			today,
+			item.dateNextPurchased.toDate(),
+		);
+		const daysSinceLastPurchase = getDaysBetweenDates(
+			today,
+			item.dateLastPurchased?.toDate() ?? item.dateCreated.toDate(),
+		);
+		item.daysUntilPurchase = daysUntilNextPurchase;
+		if (daysSinceLastPurchase > 60) {
+			inactive.push(item);
+		} else if (today.getTime() > item.dateNextPurchased.toDate().getTime()) {
+			overdue.push(item);
+		} else if (daysUntilNextPurchase <= 7) {
+			soon.push(item);
+		} else if (daysUntilNextPurchase < 30) {
+			kindOfSoon.push(item);
+		} else if (daysUntilNextPurchase >= 30) {
+			notSoon.push(item);
+		}
+	});
+	const categorizedItems = {
+		overdue,
+		soon,
+		kindOfSoon,
+		notSoon,
+		inactive,
+	};
+
+	for (let category in categorizedItems) {
+		categorizedItems[category].sort(sortItems);
+	}
+
+	console.log(categorizedItems);
+
+	return categorizedItems;
+}
+
 /**
  * Add a new item to the user's list in Firestore.
  * @param {string} listId The id of the list we're adding to.
