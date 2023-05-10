@@ -71,16 +71,36 @@ export function List({ data, listId }) {
 				</form>
 			)}
 			<ul>
-				<h2>Overdue:</h2>
-				{data.overdue.flatMap((item) => filterItem(item, 'overdue'))}
-				<h2>Soon:</h2>
-				{data.soon.flatMap((item) => filterItem(item, 'soon'))}
-				<h2>Kind of soon:</h2>
-				{data.kindOfSoon.flatMap((item) => filterItem(item, 'kindOfSoon'))}
-				<h2>Not soon:</h2>
-				{data.notSoon.flatMap((item) => filterItem(item, 'notSoon'))}
-				<h2>Inactive:</h2>
-				{data.inactive.flatMap((item) => filterItem(item, 'inactive'))}
+				{data.overdue.length > 0 && (
+					<>
+						<h2>Overdue:</h2>
+						{data.overdue.flatMap((item) => filterItem(item, 'overdue'))}
+					</>
+				)}
+				{data.soon.length > 0 && (
+					<>
+						<h2>Soon:</h2>
+						{data.soon.flatMap((item) => filterItem(item, 'soon'))}
+					</>
+				)}
+				{data.kindOfSoon.length > 0 && (
+					<>
+						<h2>Kind of soon:</h2>
+						{data.kindOfSoon.flatMap((item) => filterItem(item, 'kindOfSoon'))}
+					</>
+				)}
+				{data.notSoon.length > 0 && (
+					<>
+						<h2>Not soon:</h2>
+						{data.notSoon.flatMap((item) => filterItem(item, 'notSoon'))}
+					</>
+				)}
+				{data.inactive.length > 0 && (
+					<>
+						<h2>Inactive:</h2>
+						{data.inactive.flatMap((item) => filterItem(item, 'inactive'))}
+					</>
+				)}
 			</ul>
 		</>
 	);
