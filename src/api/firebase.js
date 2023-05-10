@@ -84,6 +84,9 @@ export function comparePurchaseUrgency(data) {
 			item.dateLastPurchased?.toDate() ?? item.dateCreated.toDate(),
 		);
 		item.daysUntilPurchase = daysUntilNextPurchase;
+		if (item.dateNextPurchased.toDate().getTime() < today.getTime()) {
+			item.daysUntilPurchase *= -1;
+		}
 		if (daysSinceLastPurchase > 60) {
 			inactive.push(item);
 		} else if (today.getTime() > item.dateNextPurchased.toDate().getTime()) {
