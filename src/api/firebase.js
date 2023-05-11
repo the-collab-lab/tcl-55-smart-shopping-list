@@ -54,29 +54,30 @@ export function getItemData(snapshot) {
 		.filter((item) => item.name !== null);
 }
 
-export function comparePurchaseUrgency(data) {
-	function sortItems(item1, item2) {
-		if (item1.daysUntilPurchase < item2.daysUntilPurchase) {
-			return -1;
-		} else if (item1.daysUntilPurchase > item2.daysUntilPurchase) {
-			return 1;
-		}
-		if (item1.name < item2.name) {
-			return -1;
-		}
-		return 0;
+function sortItems(item1, item2) {
+	if (item1.daysUntilPurchase < item2.daysUntilPurchase) {
+		return -1;
+	} else if (item1.daysUntilPurchase > item2.daysUntilPurchase) {
+		return 1;
 	}
+	if (item1.name < item2.name) {
+		return -1;
+	}
+	return 0;
+}
 
+export function comparePurchaseUrgency(data) {
 	const today = new Date();
 	const categorizedItems = data.reduce(
 		(acc, item) => {
+			const { dateCreated, dateNextPurchased, dateLastPurchased } = item;
 			const daysUntilNextPurchase = getDaysBetweenDates(
 				today,
-				item.dateNextPurchased.toDate(),
+				dateNextPurchased.toDate(),
 			);
 			const daysSinceLastPurchase = getDaysBetweenDates(
 				today,
-				item.dateLastPurchased?.toDate() ?? item.dateCreated.toDate(),
+				dateLastPurchased?.toDate() ?? dateCreated.toDate(),
 			);
 			item.daysUntilPurchase = daysUntilNextPurchase;
 			if (item.dateNextPurchased.toDate().getTime() < today.getTime()) {
@@ -86,7 +87,7 @@ export function comparePurchaseUrgency(data) {
 			let category;
 			if (daysSinceLastPurchase > 60) {
 				category = 'Inactive';
-			} else if (today.getTime() > item.dateNextPurchased.toDate().getTime()) {
+			} else if (today.getTime() > dateNextPurchased.toDate().getTime()) {
 				category = 'Overdue';
 			} else if (daysUntilNextPurchase <= 7) {
 				category = 'Soon';
