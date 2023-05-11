@@ -33,7 +33,7 @@ export function ListItem({ item, listId }) {
 
 	return (
 		<>
-			<li className="ListItem">
+			<li className="ListItem" style={{ display: 'block' }}>
 				<input
 					type="checkbox"
 					id={`mark-${name}-purchased-id-${id}`}
@@ -57,14 +57,14 @@ export function ListItem({ item, listId }) {
 				>
 					Delete
 				</button>
+				{showDetails && (
+					<ListItemDetails
+						totalPurchases={totalPurchases}
+						lastPurchasedDate={lastPurchasedDate}
+						nextPurchasedDate={nextPurchasedDate}
+					/>
+				)}
 			</li>
-			{showDetails && (
-				<ListItemDetails
-					totalPurchases={totalPurchases}
-					lastPurchasedDate={lastPurchasedDate}
-					nextPurchasedDate={nextPurchasedDate}
-				/>
-			)}
 		</>
 	);
 }
