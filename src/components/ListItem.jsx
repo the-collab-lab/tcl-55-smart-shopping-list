@@ -12,11 +12,11 @@ export function ListItem({ item, listId, urgency }) {
 	};
 
 	const urgencyColors = {
-		overdue: 'purple',
-		soon: 'red',
-		kindOfSoon: 'orange',
-		notSoon: 'yellow',
-		inactive: 'gray',
+		Overdue: 'purple',
+		Soon: 'red',
+		'Kind Of Soon': 'orange',
+		'Not Soon': 'yellow',
+		Inactive: 'gray',
 	};
 
 	return (

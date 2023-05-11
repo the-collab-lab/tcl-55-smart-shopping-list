@@ -68,50 +68,55 @@ export function comparePurchaseUrgency(data) {
 	}
 
 	const today = new Date();
-	const soon = [];
-	const kindOfSoon = [];
-	const notSoon = [];
-	const inactive = [];
-	const overdue = [];
+	const categorizedItems = data.reduce(
+		(acc, item) => {
+			const daysUntilNextPurchase = getDaysBetweenDates(
+				today,
+				item.dateNextPurchased.toDate(),
+			);
+			const daysSinceLastPurchase = getDaysBetweenDates(
+				today,
+				item.dateLastPurchased?.toDate() ?? item.dateCreated.toDate(),
+			);
+			item.daysUntilPurchase = daysUntilNextPurchase;
+			if (item.dateNextPurchased.toDate().getTime() < today.getTime()) {
+				item.daysUntilPurchase *= -1;
+			}
 
-	data.forEach((item) => {
-		const daysUntilNextPurchase = getDaysBetweenDates(
-			today,
-			item.dateNextPurchased.toDate(),
-		);
-		const daysSinceLastPurchase = getDaysBetweenDates(
-			today,
-			item.dateLastPurchased?.toDate() ?? item.dateCreated.toDate(),
-		);
-		item.daysUntilPurchase = daysUntilNextPurchase;
-		if (item.dateNextPurchased.toDate().getTime() < today.getTime()) {
-			item.daysUntilPurchase *= -1;
-		}
-		if (daysSinceLastPurchase > 60) {
-			inactive.push(item);
-		} else if (today.getTime() > item.dateNextPurchased.toDate().getTime()) {
-			overdue.push(item);
-		} else if (daysUntilNextPurchase <= 7) {
-			soon.push(item);
-		} else if (daysUntilNextPurchase < 30) {
-			kindOfSoon.push(item);
-		} else if (daysUntilNextPurchase >= 30) {
-			notSoon.push(item);
-		}
-	});
-	const categorizedItems = {
-		overdue,
-		soon,
-		kindOfSoon,
-		notSoon,
-		inactive,
-	};
+			let category;
+			if (daysSinceLastPurchase > 60) {
+				category = 'Inactive';
+			} else if (today.getTime() > item.dateNextPurchased.toDate().getTime()) {
+				category = 'Overdue';
+			} else if (daysUntilNextPurchase <= 7) {
+				category = 'Soon';
+			} else if (daysUntilNextPurchase < 30) {
+				category = 'Kind Of Soon';
+			} else if (daysUntilNextPurchase >= 30) {
+				category = 'Not Soon';
+			}
 
-	for (let category in categorizedItems) {
-		categorizedItems[category].sort(sortItems);
-	}
+			acc[category].push(item);
+			return acc;
+		},
+		{
+			Overdue: [],
+			Soon: [],
+			'Kind Of Soon': [],
+			'Not Soon': [],
+			Inactive: [],
+		},
+	);
 
-	return categorizedItems;
+	const sortedCategorizedItems = Object.entries(categorizedItems).reduce(
+		(acc, [category, items]) => {
+			acc[category] = [...items].sort(sortItems);
+			return acc;
+		},
+		{},
+	);
+
+	return sortedCategorizedItems;
 }
 
 /**

@@ -5,8 +5,8 @@ import { ListItem } from '../components';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
-	data = comparePurchaseUrgency(data);
 	const navigate = useNavigate();
+	const categorizedData = comparePurchaseUrgency(data);
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value;
@@ -35,7 +35,7 @@ export function List({ data, listId }) {
 
 	return (
 		<>
-			{data.length === 0 && (
+			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
 						display: 'flex',
@@ -49,7 +49,7 @@ export function List({ data, listId }) {
 					</button>
 				</section>
 			)}
-			{data.length !== 0 && (
+			{Object.values(categorizedData).flat().length !== 0 && (
 				<form
 					onSubmit={handleFormSubmit}
 					style={{ display: 'flex', gap: '1rem' }}
@@ -71,36 +71,18 @@ export function List({ data, listId }) {
 				</form>
 			)}
 			<ul>
-				{data.overdue.length > 0 && (
-					<>
-						<h2>Overdue:</h2>
-						{data.overdue.flatMap((item) => filterItem(item, 'overdue'))}
-					</>
-				)}
-				{data.soon.length > 0 && (
-					<>
-						<h2>Soon:</h2>
-						{data.soon.flatMap((item) => filterItem(item, 'soon'))}
-					</>
-				)}
-				{data.kindOfSoon.length > 0 && (
-					<>
-						<h2>Kind of soon:</h2>
-						{data.kindOfSoon.flatMap((item) => filterItem(item, 'kindOfSoon'))}
-					</>
-				)}
-				{data.notSoon.length > 0 && (
-					<>
-						<h2>Not soon:</h2>
-						{data.notSoon.flatMap((item) => filterItem(item, 'notSoon'))}
-					</>
-				)}
-				{data.inactive.length > 0 && (
-					<>
-						<h2>Inactive:</h2>
-						{data.inactive.flatMap((item) => filterItem(item, 'inactive'))}
-					</>
-				)}
+				{Object.keys(categorizedData).map((key) => (
+					<Fragment key={key}>
+						{categorizedData[key].filter((item) =>
+							item.name.toLowerCase().includes(searchInput.toLowerCase()),
+						).length > 0 && (
+							<>
+								<h2>{key}:</h2>
+								{categorizedData[key].flatMap((item) => filterItem(item, key))}
+							</>
+						)}
+					</Fragment>
+				))}
 			</ul>
 		</>
 	);
