@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { updateItem, deleteItem } from '../api/firebase';
 import { isWithinLastDay } from '../utils/dates';
-import './ListItem.css';
 import { ListItemDetails } from './ListItemDetails';
+import './ListItem.css';
 
-export function ListItem({ item, listId }) {
+export function ListItem({ item, listId, handleDeleteConfirmation }) {
 	const [showDetails, setShowDetails] = useState(false);
 	const { id, name, dateLastPurchased, dateNextPurchased, totalPurchases } =
 		item;
@@ -23,11 +23,9 @@ export function ListItem({ item, listId }) {
 	};
 
 	const handleDeleteItem = async () => {
-		if (window.confirm('Are you sure you want to delete this item?')) {
+		if (window.confirm(`Are you sure you want to delete ${name}?`)) {
 			const result = await deleteItem(listId, id);
-			if (result) {
-				alert(`${name} has successfully been deleted!`);
-			} else alert(`Error deleting ${name}, please try again.`);
+			result && handleDeleteConfirmation(name);
 		}
 	};
 

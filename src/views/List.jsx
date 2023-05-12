@@ -1,10 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
 	const navigate = useNavigate();
 	const [searchInput, setSearchInput] = useState('');
+	const [openDialog, setOpenDialog] = useState(false);
+	const [deletedItemName, setDeletedItemName] = useState('');
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setOpenDialog(false);
+		}, 1500);
+
+		return () => clearTimeout(timer);
+	}, [openDialog]);
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value;
@@ -21,9 +31,21 @@ export function List({ data, listId }) {
 		navigate('/add-item');
 	};
 
+	const handleDeleteConfirmation = (itemName) => {
+		setDeletedItemName(itemName);
+		setOpenDialog(true);
+	};
+
 	const filterItem = (item) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
-			return <ListItem key={item.id} listId={listId} item={item} />;
+			return (
+				<ListItem
+					key={item.id}
+					listId={listId}
+					item={item}
+					handleDeleteConfirmation={handleDeleteConfirmation}
+				/>
+			);
 		}
 
 		return [];
@@ -66,6 +88,9 @@ export function List({ data, listId }) {
 					) : null}
 				</form>
 			)}
+			<dialog open={openDialog} style={{ position: 'fixed' }}>
+				You have successfully deleted {deletedItemName}.
+			</dialog>
 			<ul>{data.flatMap((item) => filterItem(item))}</ul>
 		</>
 	);
