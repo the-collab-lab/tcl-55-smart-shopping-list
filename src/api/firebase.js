@@ -54,7 +54,7 @@ export function getItemData(snapshot) {
 		.filter((item) => item.name !== null);
 }
 
-function sortItems(item1, item2) {
+function compareItemUrgency(item1, item2) {
 	if (item1.daysUntilPurchase < item2.daysUntilPurchase) {
 		return -1;
 	} else if (item1.daysUntilPurchase > item2.daysUntilPurchase) {
@@ -111,7 +111,7 @@ export function comparePurchaseUrgency(data) {
 
 	const sortedCategorizedItems = Object.entries(categorizedItems).reduce(
 		(acc, [category, items]) => {
-			acc[category] = [...items].sort(sortItems);
+			acc[category] = [...items].sort(compareItemUrgency);
 			return acc;
 		},
 		{},
