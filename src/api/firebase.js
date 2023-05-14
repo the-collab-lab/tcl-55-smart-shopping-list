@@ -2,7 +2,6 @@ import {
 	addDoc,
 	collection,
 	doc,
-	getDoc,
 	increment,
 	onSnapshot,
 	updateDoc,
@@ -53,6 +52,72 @@ export function getItemData(snapshot) {
 			return data;
 		})
 		.filter((item) => item.name !== null);
+}
+
+function compareItemUrgency(item1, item2) {
+	if (item1.daysUntilPurchase < item2.daysUntilPurchase) {
+		return -1;
+	} else if (item1.daysUntilPurchase > item2.daysUntilPurchase) {
+		return 1;
+	}
+	if (item1.name.toLowerCase() < item2.name.toLowerCase()) {
+		return -1;
+	}
+	return 0;
+}
+
+export function comparePurchaseUrgency(data) {
+	const today = new Date();
+	const categorizedItems = data.reduce(
+		(acc, item) => {
+			const { dateCreated, dateNextPurchased, dateLastPurchased } = item;
+			const daysUntilNextPurchase = getDaysBetweenDates(
+				today,
+				dateNextPurchased.toDate(),
+			);
+			const daysSinceLastPurchase = getDaysBetweenDates(
+				today,
+				dateLastPurchased?.toDate() ?? dateCreated.toDate(),
+			);
+			item.daysUntilPurchase = daysUntilNextPurchase;
+			if (dateNextPurchased.toDate().getTime() < today.getTime()) {
+				item.daysUntilPurchase *= -1;
+			}
+
+			let category;
+			if (daysSinceLastPurchase > 60) {
+				category = 'Inactive';
+			} else if (today.getTime() > dateNextPurchased.toDate().getTime()) {
+				category = 'Overdue';
+			} else if (daysUntilNextPurchase <= 7) {
+				category = 'Soon';
+			} else if (daysUntilNextPurchase < 30) {
+				category = 'Kind Of Soon';
+			} else if (daysUntilNextPurchase >= 30) {
+				category = 'Not Soon';
+			}
+
+			acc[category].push(item);
+			return acc;
+		},
+		{
+			Overdue: [],
+			Soon: [],
+			'Kind Of Soon': [],
+			'Not Soon': [],
+			Inactive: [],
+		},
+	);
+
+	const sortedCategorizedItems = Object.entries(categorizedItems).reduce(
+		(acc, [category, items]) => {
+			acc[category] = [...items].sort(compareItemUrgency);
+			return acc;
+		},
+		{},
+	);
+
+	return sortedCategorizedItems;
 }
 
 /**

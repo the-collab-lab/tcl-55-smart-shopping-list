@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { comparePurchaseUrgency } from '../api';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
-	const navigate = useNavigate();
 	const [searchInput, setSearchInput] = useState('');
 	const navigate = useNavigate();
+	const categorizedData = comparePurchaseUrgency(data);
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value;
@@ -22,9 +23,11 @@ export function List({ data, listId }) {
 		navigate('/add-item');
 	};
 
-	const filterItem = (item) => {
+	const filterItem = (item, urgency) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
-			return <ListItem key={item.id} listId={listId} item={item} />;
+			return (
+				<ListItem key={item.id} listId={listId} item={item} urgency={urgency} />
+			);
 		}
 
 		return [];
@@ -32,7 +35,7 @@ export function List({ data, listId }) {
 
 	return (
 		<>
-			{data.length === 0 && (
+			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
 						display: 'flex',
@@ -46,7 +49,7 @@ export function List({ data, listId }) {
 					</button>
 				</section>
 			)}
-			{data.length !== 0 && (
+			{Object.values(categorizedData).flat().length !== 0 && (
 				<form
 					onSubmit={handleFormSubmit}
 					style={{ display: 'flex', gap: '1rem' }}
@@ -67,7 +70,20 @@ export function List({ data, listId }) {
 					) : null}
 				</form>
 			)}
-			<ul>{data.flatMap((item) => filterItem(item))}</ul>
+			<ul>
+				{Object.keys(categorizedData).map((key) => (
+					<Fragment key={key}>
+						{categorizedData[key].filter((item) =>
+							item.name.toLowerCase().includes(searchInput.toLowerCase()),
+						).length > 0 && (
+							<>
+								<h2>{key}:</h2>
+								{categorizedData[key].flatMap((item) => filterItem(item, key))}
+							</>
+						)}
+					</Fragment>
+				))}
+			</ul>
 		</>
 	);
 }
