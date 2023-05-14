@@ -60,7 +60,7 @@ function compareItemUrgency(item1, item2) {
 	} else if (item1.daysUntilPurchase > item2.daysUntilPurchase) {
 		return 1;
 	}
-	if (item1.name < item2.name) {
+	if (item1.name.toLowerCase() < item2.name.toLowerCase()) {
 		return -1;
 	}
 	return 0;
