@@ -5,16 +5,16 @@ import { ListItem } from '../components';
 export function List({ data, listId }) {
 	const navigate = useNavigate();
 	const [searchInput, setSearchInput] = useState('');
-	const [openDialog, setOpenDialog] = useState(false);
-	const [deletedItemName, setDeletedItemName] = useState('');
+	const [isOpen, setIsOpen] = useState(false);
+	const [dialogText, setDialogText] = useState('');
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			setOpenDialog(false);
+			setIsOpen(false);
 		}, 1500);
 
 		return () => clearTimeout(timer);
-	}, [openDialog]);
+	}, [isOpen]);
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value;
@@ -31,9 +31,14 @@ export function List({ data, listId }) {
 		navigate('/add-item');
 	};
 
-	const handleDeleteConfirmation = (itemName) => {
-		setDeletedItemName(itemName);
-		setOpenDialog(true);
+	const handleDeleteConfirmation = (result, itemName) => {
+		if (result) {
+			// setDeletedItemName(itemName);
+			setIsOpen(true);
+			setDialogText(`You have successfully deleted ${itemName}.`);
+		} else {
+			setDialogText(`Error deleting ${itemName}, please try again .`);
+		}
 	};
 
 	const filterItem = (item) => {
@@ -88,8 +93,8 @@ export function List({ data, listId }) {
 					) : null}
 				</form>
 			)}
-			<dialog open={openDialog} style={{ position: 'fixed' }}>
-				You have successfully deleted {deletedItemName}.
+			<dialog open={isOpen} style={{ position: 'fixed' }}>
+				{dialogText}
 			</dialog>
 			<ul>{data.flatMap((item) => filterItem(item))}</ul>
 		</>

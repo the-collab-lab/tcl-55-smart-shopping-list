@@ -25,7 +25,7 @@ export function ListItem({ item, listId, handleDeleteConfirmation }) {
 	const handleDeleteItem = async () => {
 		if (window.confirm(`Are you sure you want to delete ${name}?`)) {
 			const result = await deleteItem(listId, id);
-			result && handleDeleteConfirmation(name);
+			handleDeleteConfirmation(result, name);
 		}
 	};
 
