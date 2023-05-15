@@ -7,8 +7,8 @@ export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 	const [dialogText, setDialogText] = useState('');
-  
-  const navigate = useNavigate();
+
+	const navigate = useNavigate();
 	const categorizedData = comparePurchaseUrgency(data);
 
 	useEffect(() => {
@@ -47,7 +47,13 @@ export function List({ data, listId }) {
 	const filterItem = (item, urgency) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
 			return (
-				<ListItem key={item.id} listId={listId} item={item} urgency={urgency} />
+				<ListItem
+					key={item.id}
+					listId={listId}
+					item={item}
+					urgency={urgency}
+					handleDeleteConfirmation={handleDeleteConfirmation}
+				/>
 			);
 		}
 
