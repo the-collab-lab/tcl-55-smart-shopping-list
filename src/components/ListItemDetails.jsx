@@ -9,7 +9,10 @@ export function ListItemDetails({
 		<section>
 			{lastPurchasedDate ? (
 				<>
-					<p>You have purchased this item {totalPurchases} times</p>
+					<p>
+						You have purchased this item {totalPurchases} time
+						{totalPurchases > 1 ? 's' : ''}
+					</p>
 					<p>Last purchased: {lastPurchasedDate}</p>
 				</>
 			) : (

@@ -33,10 +33,10 @@ export function List({ data, listId }) {
 
 	const handleDeleteConfirmation = (result, itemName) => {
 		if (result) {
-			// setDeletedItemName(itemName);
 			setIsOpen(true);
 			setDialogText(`You have successfully deleted ${itemName}.`);
 		} else {
+			setIsOpen(true);
 			setDialogText(`Error deleting ${itemName}, please try again .`);
 		}
 	};
