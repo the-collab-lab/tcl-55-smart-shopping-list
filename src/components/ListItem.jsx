@@ -4,7 +4,7 @@ import { isWithinLastDay } from '../utils/dates';
 import { ListItemDetails } from './ListItemDetails';
 import './ListItem.css';
 
-export function ListItem({ item, listId, handleDeleteConfirmation }) {
+export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 	const [showDetails, setShowDetails] = useState(false);
 	const { id, name, dateLastPurchased, dateNextPurchased, totalPurchases } =
 		item;
@@ -17,7 +17,7 @@ export function ListItem({ item, listId, handleDeleteConfirmation }) {
 			await updateItem(listId, item);
 		}
 	};
-
+  
 	const handleShowDetails = () => {
 		setShowDetails(!showDetails);
 	};
@@ -28,6 +28,14 @@ export function ListItem({ item, listId, handleDeleteConfirmation }) {
 			handleDeleteConfirmation(result, name);
 		}
 	};
+  
+  const urgencyColors = {
+		Overdue: 'purple',
+		Soon: 'red',
+		'Kind Of Soon': 'orange',
+		'Not Soon': 'yellow',
+		Inactive: 'gray',
+	};
 
 	return (
 		<>
@@ -37,6 +45,9 @@ export function ListItem({ item, listId, handleDeleteConfirmation }) {
 					id={`mark-${name}-purchased-id-${id}`}
 					onChange={handlePurchase}
 					checked={isWithinLastDay(item.dateLastPurchased)}
+          style={{
+					  backgroundColor: urgencyColors[urgency],
+				  }}
 				/>
 				<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
 				<button

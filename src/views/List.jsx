@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { comparePurchaseUrgency } from '../api';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
-	const navigate = useNavigate();
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 	const [dialogText, setDialogText] = useState('');
+  
+  const navigate = useNavigate();
+	const categorizedData = comparePurchaseUrgency(data);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -41,15 +44,10 @@ export function List({ data, listId }) {
 		}
 	};
 
-	const filterItem = (item) => {
+	const filterItem = (item, urgency) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
 			return (
-				<ListItem
-					key={item.id}
-					listId={listId}
-					item={item}
-					handleDeleteConfirmation={handleDeleteConfirmation}
-				/>
+				<ListItem key={item.id} listId={listId} item={item} urgency={urgency} />
 			);
 		}
 
@@ -58,7 +56,7 @@ export function List({ data, listId }) {
 
 	return (
 		<>
-			{data.length === 0 && (
+			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
 						display: 'flex',
@@ -72,7 +70,7 @@ export function List({ data, listId }) {
 					</button>
 				</section>
 			)}
-			{data.length !== 0 && (
+			{Object.values(categorizedData).flat().length !== 0 && (
 				<form
 					onSubmit={handleFormSubmit}
 					style={{ display: 'flex', gap: '1rem' }}
@@ -96,7 +94,20 @@ export function List({ data, listId }) {
 			<dialog open={isOpen} style={{ position: 'fixed' }}>
 				{dialogText}
 			</dialog>
-			<ul>{data.flatMap((item) => filterItem(item))}</ul>
+			<ul>
+				{Object.keys(categorizedData).map((key) => (
+					<Fragment key={key}>
+						{categorizedData[key].filter((item) =>
+							item.name.toLowerCase().includes(searchInput.toLowerCase()),
+						).length > 0 && (
+							<>
+								<h2>{key}:</h2>
+								{categorizedData[key].flatMap((item) => filterItem(item, key))}
+							</>
+						)}
+					</Fragment>
+				))}
+			</ul>
 		</>
 	);
 }
