@@ -1,12 +1,23 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
-	const navigate = useNavigate();
+	const [isOpen, setIsOpen] = useState(false);
+	const [dialogText, setDialogText] = useState('');
+  
+  const navigate = useNavigate();
 	const categorizedData = comparePurchaseUrgency(data);
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setIsOpen(false);
+		}, 1500);
+
+		return () => clearTimeout(timer);
+	}, [isOpen]);
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value;
@@ -21,6 +32,16 @@ export function List({ data, listId }) {
 
 	const handleFirstItem = () => {
 		navigate('/add-item');
+	};
+
+	const handleDeleteConfirmation = (result, itemName) => {
+		if (result) {
+			setIsOpen(true);
+			setDialogText(`You have successfully deleted ${itemName}.`);
+		} else {
+			setIsOpen(true);
+			setDialogText(`Error deleting ${itemName}, please try again .`);
+		}
 	};
 
 	const filterItem = (item, urgency) => {
@@ -70,6 +91,9 @@ export function List({ data, listId }) {
 					) : null}
 				</form>
 			)}
+			<dialog open={isOpen} style={{ position: 'fixed' }}>
+				{dialogText}
+			</dialog>
 			<ul>
 				{Object.keys(categorizedData).map((key) => (
 					<Fragment key={key}>
