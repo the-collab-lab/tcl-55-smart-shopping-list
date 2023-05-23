@@ -12,7 +12,7 @@ import { getItemData, streamListItems } from './api';
 import { useStateWithStorage } from './utils';
 
 import { ChakraProvider } from '@chakra-ui/react';
-import { theme } from './utils/theme';
+import theme from './utils/theme';
 import '@fontsource/playfair-display';
 import '@fontsource/ysabeau';
 
