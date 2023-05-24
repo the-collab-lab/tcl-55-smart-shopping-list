@@ -1,20 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import {
+	Box,
+	Drawer,
+	DrawerBody,
+	DrawerHeader,
+	DrawerOverlay,
+	DrawerContent,
+	DrawerCloseButton,
+	FormControl,
+	FormLabel,
+	RadioGroup,
+	Radio,
+	Input,
+	Button,
+	useToast,
+	Flex,
+	Stack,
+	Heading,
+	Text,
+} from '@chakra-ui/react';
 import { addItem } from '../api/firebase';
 
-export function AddItem({ data, listId }) {
+export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
 	const [timeframe, setTimeframe] = useState('7');
 	const [itemName, setItemName] = useState('');
-	const [messages, setMessages] = useState([]);
+	const toast = useToast();
 
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			setMessages([]);
-		}, 3000);
-
-		return () => clearTimeout(timer);
-	}, [messages]);
-
-	const onTimeChange = (e) => setTimeframe(e.target.value);
 	const onItemChange = (e) => setItemName(e.target.value);
 
 	// function to validate itemName input that returns error messages if any - called onFormSubmit
@@ -22,17 +33,23 @@ export function AddItem({ data, listId }) {
 		// 1- checks for empty inputs
 
 		if (!trimmedItemName) {
-			return ['Please enter an item name.'];
+			toast({
+				title: 'No item name entered',
+				description: `Please enter an item name.`,
+				status: 'error',
+			});
+			return false;
 		}
-
-		const errArray = [];
 
 		// 2- checks for invalid characters
 
 		if (trimmedItemName.search(/[^a-z0-9'&-\s]/i) !== -1) {
-			errArray.push(
-				`Invalid item name entered. Please only use alphanumeric, ', -, or & characters in your item name.`,
-			);
+			toast({
+				title: 'Invalid item name entered',
+				description: `Please only use alphanumeric, ', -, or & characters in your item name.`,
+				status: 'error',
+			});
+			return false;
 		}
 
 		const normalizedItemName = trimmedItemName
@@ -47,108 +64,100 @@ export function AddItem({ data, listId }) {
 		// 3- checks for potential match including exact match and match after removing special characters and spaces
 
 		if (potentialMatch) {
-			errArray.push(
-				`${trimmedItemName} is already on your list as ${potentialMatch.name}.`,
-			);
+			toast({
+				title: 'Item already on list',
+				description: `You are already tracking ${potentialMatch.name}.`,
+				status: 'error',
+			});
+			return false;
 		}
-
-		return errArray;
+		return true;
 	}
 
 	const onFormSubmit = async (e) => {
 		e.preventDefault();
 		const trimmedItemName = itemName.trim();
 
-		const errArray = validateItemInput(data, trimmedItemName);
-		if (errArray.length) {
-			setMessages(errArray);
-			return;
-		}
+		const isValidItem = validateItemInput(data, trimmedItemName);
 
-		const result = await addItem(listId, {
-			itemName: trimmedItemName,
-			daysUntilNextPurchase: timeframe,
-		});
-		if (result) {
-			setMessages([`Added ${trimmedItemName} to your list.`]);
-			setItemName('');
-			setTimeframe('7');
-		} else {
-			setMessages(['Error adding item, please try again.']);
+		if (isValidItem) {
+			const result = await addItem(listId, {
+				itemName: trimmedItemName,
+				daysUntilNextPurchase: timeframe,
+			});
+			if (result) {
+				toast({
+					title: 'Item added',
+					description: `Added ${trimmedItemName} to your list.`,
+					status: 'success',
+				});
+				setItemName('');
+				setTimeframe('7');
+			} else {
+				toast({
+					title: 'Error adding item',
+					description: 'Please try again.',
+					status: 'error',
+				});
+			}
 		}
 	};
 
 	return (
-		<form onSubmit={onFormSubmit}>
-			<div
-				style={{
-					border: 'none',
-					padding: 0,
-					paddingBottom: '1.5rem',
-					display: 'flex',
-					flexDirection: 'column',
-				}}
+		<>
+			<Drawer
+				isOpen={isOpen}
+				placement="right"
+				onClose={onClose}
+				finalFocusRef={btnRef}
 			>
-				<label htmlFor="itemName">Item name:</label>
-				<input
-					type="text"
-					id="itemName"
-					name="itemName"
-					value={itemName}
-					onChange={onItemChange}
-				></input>
-			</div>
-			<fieldset
-				style={{
-					border: 'none',
-					padding: 0,
-					display: 'grid',
-					gridTemplateColumns: '1fr 1fr',
-				}}
-			>
-				<legend
-					htmlFor="timeframe"
-					style={{ padding: 0, gridColumn: 'span 2' }}
-				>
-					How soon will you buy this again?
-				</legend>
-
-				<input
-					type="radio"
-					name="timeframe"
-					value={7}
-					id="soon"
-					checked={timeframe === '7'}
-					onChange={onTimeChange}
-				/>
-				<label htmlFor="soon">Soon</label>
-
-				<input
-					type="radio"
-					name="timeframe"
-					value={14}
-					id="kindOfSoon"
-					checked={timeframe === '14'}
-					onChange={onTimeChange}
-				/>
-
-				<label htmlFor="kindOfSoon">Kind of Soon</label>
-				<input
-					type="radio"
-					name="timeframe"
-					value={30}
-					id="notSoon"
-					checked={timeframe === '30'}
-					onChange={onTimeChange}
-				/>
-				<label htmlFor="notSoon">Not Soon</label>
-			</fieldset>
-			<button type="submit">Add Item</button>
-
-			{messages.length > 0 &&
-				messages.map((msg, index) => (
-					<p key={`error-message-${index}`}>{msg}</p>
-				))}
-		</form>
+				<DrawerOverlay />
+				<DrawerContent bg={'brand.500'} justify="center">
+					<DrawerCloseButton />
+					<DrawerHeader>
+						<Heading>Add Item</Heading>
+					</DrawerHeader>
+					<DrawerBody>
+						<form onSubmit={onFormSubmit}>
+							<Flex direction="column" justify="center" gap={4}>
+								<Text htmlFor="itemName">Item Name:</Text>
+								<Input
+									type="text"
+									id="itemName"
+									name="itemName"
+									variant="filled"
+									bg="#231825"
+									value={itemName}
+									onChange={onItemChange}
+								/>
+								<FormControl>
+									<FormLabel htmlFor="timeframe">
+										How soon will you buy this again?
+									</FormLabel>
+									<RadioGroup onChange={setTimeframe} value={timeframe}>
+										<Stack>
+											<Radio value={'7'} borderColor="text.500">
+												Soon
+											</Radio>
+											<Radio value={'14'} borderColor="text.500">
+												Kind of Soon
+											</Radio>
+											<Radio value={'30'} borderColor="text.500">
+												Not Soon
+											</Radio>
+										</Stack>
+									</RadioGroup>
+								</FormControl>
+								<Box>
+									<Button type="submit" p={2}>
+										Add Item
+									</Button>
+								</Box>
+							</Flex>
+						</form>
+					</DrawerBody>
+				</DrawerContent>
+			</Drawer>
+		</>
 	);
 }

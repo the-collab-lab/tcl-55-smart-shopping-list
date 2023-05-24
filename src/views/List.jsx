@@ -1,12 +1,16 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api';
+import { Button, useDisclosure } from '@chakra-ui/react';
+import { AddItem } from './AddItem';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 	const [dialogText, setDialogText] = useState('');
+	const btnRef = useRef();
+	const { isOpen: isDrawerOpen, onOpen, onClose } = useDisclosure();
 
 	const navigate = useNavigate();
 	const categorizedData = comparePurchaseUrgency(data);
@@ -62,6 +66,13 @@ export function List({ data, listId }) {
 
 	return (
 		<>
+			<AddItem
+				btnRef={btnRef}
+				data={data}
+				listId={listId}
+				onClose={onClose}
+				isOpen={isDrawerOpen}
+			/>
 			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
@@ -89,7 +100,10 @@ export function List({ data, listId }) {
 						value={searchInput}
 						onChange={handleSearchInput}
 						placeholder="Start typing here..."
-					></input>
+					/>
+					<Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+						Add Item
+					</Button>
 					{searchInput.length > 0 ? (
 						<button type="reset" name="clear" onClick={handleClear}>
 							Clear Filter

@@ -47,6 +47,9 @@ const baseStyle = definePartsStyle((props) => {
 const alertTheme = defineMultiStyleConfig({ baseStyle });
 
 const theme = extendTheme({
+	config: {
+		initialColorMode: 'dark',
+	},
 	fonts: {
 		heading: 'Playfair Display',
 		body: 'Ysabeau',
@@ -84,6 +87,7 @@ const theme = extendTheme({
 	},
 	components: {
 		Alert: { ...alertTheme },
+		Button: { variants: { solid: { bg: 'soon.500', color: 'brand.500' } } },
 		Toast: {
 			defaultProps: {
 				position: 'top',

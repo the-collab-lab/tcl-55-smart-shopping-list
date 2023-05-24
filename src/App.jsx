@@ -80,16 +80,6 @@ export function App() {
 						)
 					}
 				/>
-				<Route
-					path="/add-item"
-					element={
-						listToken ? (
-							<AddItem data={data} listId={listToken} />
-						) : (
-							<Navigate to="/" />
-						)
-					}
-				/>
 			</Route>,
 		),
 	);
