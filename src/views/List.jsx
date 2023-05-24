@@ -2,6 +2,16 @@ import { Fragment, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api';
 import { ListItem } from '../components';
+import {
+	VStack,
+	Heading,
+	Text,
+	Tabs,
+	TabList,
+	Tab,
+	TabPanels,
+	TabPanel,
+} from '@chakra-ui/react';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
@@ -61,7 +71,10 @@ export function List({ data, listId }) {
 	};
 
 	return (
-		<>
+		<VStack>
+			<Heading>List Luxe</Heading>
+			<Text>Token:</Text>
+			<Text>{listId}</Text>
 			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
@@ -100,20 +113,46 @@ export function List({ data, listId }) {
 			<dialog open={isOpen} style={{ position: 'fixed' }}>
 				{dialogText}
 			</dialog>
-			<ul>
-				{Object.keys(categorizedData).map((key) => (
-					<Fragment key={key}>
-						{categorizedData[key].filter((item) =>
-							item.name.toLowerCase().includes(searchInput.toLowerCase()),
-						).length > 0 && (
-							<>
-								<h2>{key}:</h2>
-								{categorizedData[key].flatMap((item) => filterItem(item, key))}
-							</>
-						)}
-					</Fragment>
-				))}
-			</ul>
-		</>
+			<Tabs>
+				<TabList>
+					<Tab key="All">All</Tab>
+					{Object.keys(categorizedData).map((key) => (
+						<Tab key={key}>{key}</Tab>
+					))}
+				</TabList>
+
+				<TabPanels>
+					<TabPanel>
+						{Object.keys(categorizedData).map((key) => (
+							<Fragment key={key}>
+								{categorizedData[key].filter((item) =>
+									item.name.toLowerCase().includes(searchInput.toLowerCase()),
+								).length > 0 && (
+									<>
+										<h2>{key}:</h2>
+										{categorizedData[key].flatMap((item) =>
+											filterItem(item, key),
+										)}
+									</>
+								)}
+							</Fragment>
+						))}
+					</TabPanel>
+					{Object.keys(categorizedData).map((key) => (
+						<Fragment key={key}>
+							{categorizedData[key].filter((item) =>
+								item.name.toLowerCase().includes(searchInput.toLowerCase()),
+							).length > 0 && (
+								<TabPanel>
+									{categorizedData[key].flatMap((item) =>
+										filterItem(item, key),
+									)}
+								</TabPanel>
+							)}
+						</Fragment>
+					))}
+				</TabPanels>
+			</Tabs>
+		</VStack>
 	);
 }
