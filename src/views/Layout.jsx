@@ -1,6 +1,9 @@
 import { Outlet, NavLink } from 'react-router-dom';
+import { useDisclosure } from '@chakra-ui/hooks';
 
-import './Layout.css';
+import { About } from '../components/About';
+
+import { Heading } from '@chakra-ui/layout';
 
 /**
  * TODO: The links defined in this file don't work!
@@ -11,11 +14,15 @@ import './Layout.css';
  */
 
 export function Layout() {
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	return (
 		<>
+			<About isOpen={isOpen} onClose={onClose} />
 			<div className="Layout">
 				<header className="Layout-header">
-					<h1>Smart shopping list</h1>
+					<Heading onClick={onOpen} cursor={'pointer'}>
+						Smart shopping list
+					</Heading>
 				</header>
 				<main className="Layout-main">
 					<Outlet />
