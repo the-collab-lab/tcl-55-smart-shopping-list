@@ -1,50 +1,4 @@
 import { extendTheme } from '@chakra-ui/react';
-import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
-import { alertAnatomy } from '@chakra-ui/anatomy';
-
-const { definePartsStyle, defineMultiStyleConfig } =
-	createMultiStyleConfigHelpers(alertAnatomy.keys);
-
-const baseStyle = definePartsStyle((props) => {
-	const { status } = props;
-
-	const successBase = status === 'success' && {
-		container: {
-			background: 'soon.500',
-			color: 'text.500',
-		},
-	};
-
-	const warningBase = status === 'warning' && {
-		container: {
-			background: 'warning.500',
-			color: 'text.500',
-		},
-	};
-
-	const errorBase = status === 'error' && {
-		container: {
-			background: 'overdue.500',
-			color: 'text.500',
-		},
-	};
-
-	const infoBase = status === 'info' && {
-		container: {
-			background: '#986C9D',
-			color: 'text.500',
-		},
-	};
-
-	return {
-		...successBase,
-		...warningBase,
-		...errorBase,
-		...infoBase,
-	};
-});
-
-const alertTheme = defineMultiStyleConfig({ baseStyle });
 
 const theme = extendTheme({
 	fonts: {
@@ -56,6 +10,7 @@ const theme = extendTheme({
 			'html, body': {
 				bg: 'brand.500',
 				color: 'text.500',
+				scrollbarWidth: 'stable both-edges',
 			},
 		},
 	},
@@ -83,7 +38,25 @@ const theme = extendTheme({
 		},
 	},
 	components: {
-		Alert: { ...alertTheme },
+		Alert: {
+			variants: {
+				errorToast: {
+					container: {
+						bg: '#CE6A92',
+					},
+				},
+				successToast: {
+					container: {
+						bg: '#5AA1D8',
+					},
+				},
+				infoToast: {
+					container: {
+						bg: '#986C9D',
+					},
+				},
+			},
+		},
 		Toast: {
 			defaultProps: {
 				position: 'top',
