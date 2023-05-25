@@ -1,8 +1,9 @@
 import { Fragment, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api';
-import { Button, useDisclosure } from '@chakra-ui/react';
-import { AddItem } from './AddItem';
+import { Box, Button, IconButton, useDisclosure } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import { AddItem } from '../components/AddItem';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
@@ -66,6 +67,19 @@ export function List({ data, listId }) {
 
 	return (
 		<>
+			<IconButton
+				aria-label="Add Item"
+				icon={<AddIcon />}
+				onClick={onOpen}
+				position="absolute"
+				top={4}
+				right={4}
+				ref={btnRef}
+				colorScheme="blue"
+				background="soon.500"
+				size="md"
+				borderRadius="3xl"
+			/>
 			<AddItem
 				btnRef={btnRef}
 				data={data}
@@ -82,9 +96,9 @@ export function List({ data, listId }) {
 					}}
 				>
 					<p>Your shopping list is currently empty.</p>
-					<button name="firstItem" onClick={handleFirstItem}>
+					<Button name="firstItem" onClick={handleFirstItem}>
 						Add Item
-					</button>
+					</Button>
 				</section>
 			)}
 			{Object.values(categorizedData).flat().length !== 0 && (
@@ -101,9 +115,7 @@ export function List({ data, listId }) {
 						onChange={handleSearchInput}
 						placeholder="Start typing here..."
 					/>
-					<Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-						Add Item
-					</Button>
+
 					{searchInput.length > 0 ? (
 						<button type="reset" name="clear" onClick={handleClear}>
 							Clear Filter

@@ -36,7 +36,7 @@ export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
 			toast({
 				title: 'No item name entered',
 				description: `Please enter an item name.`,
-				status: 'error',
+				variant: 'errorToast',
 			});
 			return false;
 		}
@@ -47,7 +47,7 @@ export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
 			toast({
 				title: 'Invalid item name entered',
 				description: `Please only use alphanumeric, ', -, or & characters in your item name.`,
-				status: 'error',
+				variant: 'errorToast',
 			});
 			return false;
 		}
@@ -67,7 +67,7 @@ export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
 			toast({
 				title: 'Item already on list',
 				description: `You are already tracking ${potentialMatch.name}.`,
-				status: 'error',
+				variant: 'errorToast',
 			});
 			return false;
 		}
@@ -89,7 +89,7 @@ export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
 				toast({
 					title: 'Item added',
 					description: `Added ${trimmedItemName} to your list.`,
-					status: 'success',
+					variant: 'successToast',
 				});
 				setItemName('');
 				setTimeframe('7');
@@ -97,7 +97,7 @@ export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
 				toast({
 					title: 'Error adding item',
 					description: 'Please try again.',
-					status: 'error',
+					variant: 'errorToast',
 				});
 			}
 		}
@@ -126,7 +126,7 @@ export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
 									id="itemName"
 									name="itemName"
 									variant="filled"
-									bg="#231825"
+									bg="darkBackground.500"
 									value={itemName}
 									onChange={onItemChange}
 								/>
