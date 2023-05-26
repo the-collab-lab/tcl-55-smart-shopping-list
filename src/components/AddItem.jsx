@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	Box,
 	Drawer,
@@ -21,9 +21,16 @@ import {
 } from '@chakra-ui/react';
 import { addItem } from '../api/firebase';
 
-export function AddItem({ data, listId, isOpen, onClose, btnRef }) {
+export function AddItem({
+	data,
+	listId,
+	isOpen,
+	onClose,
+	btnRef,
+	initialValue,
+}) {
 	const [timeframe, setTimeframe] = useState('7');
-	const [itemName, setItemName] = useState('');
+	const [itemName, setItemName] = useState(initialValue);
 	const toast = useToast();
 
 	const onItemChange = (e) => setItemName(e.target.value);

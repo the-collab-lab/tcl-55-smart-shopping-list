@@ -1,7 +1,6 @@
 import { Fragment, useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api';
-import { Box, Button, IconButton, useDisclosure } from '@chakra-ui/react';
+import { Button, IconButton, Text, useDisclosure } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { AddItem } from '../components/AddItem';
 import { ListItem } from '../components';
@@ -13,7 +12,6 @@ export function List({ data, listId }) {
 	const btnRef = useRef();
 	const { isOpen: isDrawerOpen, onOpen, onClose } = useDisclosure();
 
-	const navigate = useNavigate();
 	const categorizedData = comparePurchaseUrgency(data);
 
 	useEffect(() => {
@@ -34,10 +32,6 @@ export function List({ data, listId }) {
 	};
 
 	const handleFormSubmit = (e) => e.preventDefault();
-
-	const handleFirstItem = () => {
-		navigate('/add-item');
-	};
 
 	const handleDeleteConfirmation = (result, itemName) => {
 		if (result) {
@@ -86,6 +80,14 @@ export function List({ data, listId }) {
 				listId={listId}
 				onClose={onClose}
 				isOpen={isDrawerOpen}
+				initialValue={
+					Object.values(categorizedData)
+						.flat()
+						.map((item) => item.name.toLowerCase())
+						.some((str) => str.includes(searchInput.toLowerCase()))
+						? ''
+						: searchInput
+				}
 			/>
 			{Object.values(categorizedData).flat().length === 0 && (
 				<section
@@ -95,8 +97,8 @@ export function List({ data, listId }) {
 						flexDirection: 'column',
 					}}
 				>
-					<p>Your shopping list is currently empty.</p>
-					<Button name="firstItem" onClick={handleFirstItem}>
+					<Text>Your shopping list is currently empty.</Text>
+					<Button name="firstItem" onClick={onOpen}>
 						Add Item
 					</Button>
 				</section>
