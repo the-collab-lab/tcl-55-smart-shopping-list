@@ -13,7 +13,6 @@ import {
 	TabPanel,
 	Accordion,
 	useToast,
-	Box,
 	InputGroup,
 	Input,
 	InputRightElement,
@@ -64,7 +63,7 @@ export function List({ data, listId }) {
 	const filterItem = (item, urgency) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
 			return (
-				<Accordion key={item.id} allowToggle allowMultiple>
+				<Accordion key={item.id} allowMultiple>
 					<ListItem
 						listId={listId}
 						item={item}

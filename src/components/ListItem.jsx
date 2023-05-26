@@ -9,16 +9,13 @@ import {
 	AccordionPanel,
 	AccordionIcon,
 	Box,
-	IconButton,
 	Checkbox,
-	CheckboxGroup,
 	useDisclosure,
 	Center,
 } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 
 export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
-	const [showDetails, setShowDetails] = useState(false);
 	const { id, name, dateLastPurchased, dateNextPurchased, totalPurchases } =
 		item;
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,10 +27,6 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 		if (e.target.checked) {
 			await updateItem(listId, item);
 		}
-	};
-
-	const handleShowDetails = () => {
-		setShowDetails(!showDetails);
 	};
 
 	const handleDeleteItem = async () => {
@@ -55,6 +48,7 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 				isOpen={isOpen}
 				onClose={onClose}
 				handleDelete={handleDeleteItem}
+				name={name}
 			/>
 			<AccordionItem key={item.id} borderTop="0px" borderBottom="0px">
 				<h2>
