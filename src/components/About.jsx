@@ -2,6 +2,7 @@ import {
 	Drawer,
 	DrawerBody,
 	DrawerHeader,
+	DrawerFooter,
 	DrawerOverlay,
 	DrawerContent,
 	DrawerCloseButton,
@@ -78,6 +79,11 @@ export function About({ isOpen, onClose, ref }) {
 							/>
 						</Flex>
 					</DrawerBody>
+					<DrawerFooter>
+						<a href="https://storyset.com/people">
+							People illustrations by Storyset
+						</a>
+					</DrawerFooter>
 				</DrawerContent>
 			</Drawer>
 		</>
