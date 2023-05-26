@@ -14,8 +14,11 @@ import {
 	Accordion,
 	useToast,
 	Box,
+	InputGroup,
+	Input,
+	InputRightElement,
 } from '@chakra-ui/react';
-import { CopyIcon } from '@chakra-ui/icons';
+import { CopyIcon, CloseIcon } from '@chakra-ui/icons';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
@@ -110,20 +113,21 @@ export function List({ data, listId }) {
 					onSubmit={handleFormSubmit}
 					style={{ display: 'flex', gap: '1em', margin: '1.5em' }}
 				>
-					<label htmlFor="search">Filter Items</label>
-					<input
-						type="text"
-						id="search"
-						name="search"
-						value={searchInput}
-						onChange={handleSearchInput}
-						placeholder="Start typing here..."
-					></input>
-					{searchInput.length > 0 ? (
-						<button type="reset" name="clear" onClick={handleClear}>
-							Clear Filter
-						</button>
-					) : null}
+					<InputGroup>
+						<Input
+							id="search"
+							name="search"
+							value={searchInput}
+							placeholder="Filter items here..."
+							onChange={handleSearchInput}
+							bg="darkBackground.500"
+							color="#DEDFE3"
+						/>
+
+						<InputRightElement>
+							<CloseIcon onClick={handleClear} />
+						</InputRightElement>
+					</InputGroup>
 				</form>
 			)}
 			<dialog open={isOpen} style={{ position: 'fixed' }}>

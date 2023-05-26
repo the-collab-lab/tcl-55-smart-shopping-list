@@ -18,6 +18,9 @@ const theme = extendTheme({
 		brand: {
 			500: '#3B293D',
 		},
+		darkBackground: {
+			500: '#231825',
+		},
 		overdue: {
 			500: '#CE6A92',
 		},

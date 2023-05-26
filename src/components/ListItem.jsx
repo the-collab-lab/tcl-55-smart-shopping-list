@@ -13,6 +13,7 @@ import {
 	Checkbox,
 	CheckboxGroup,
 	useDisclosure,
+	Center,
 } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 
@@ -87,11 +88,13 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 					</AccordionButton>
 				</h2>
 				<AccordionPanel pd={4}>
-					<ListItemDetails
-						totalPurchases={totalPurchases}
-						lastPurchasedDate={lastPurchasedDate}
-						nextPurchasedDate={nextPurchasedDate}
-					/>
+					<Center>
+						<ListItemDetails
+							totalPurchases={totalPurchases}
+							lastPurchasedDate={lastPurchasedDate}
+							nextPurchasedDate={nextPurchasedDate}
+						/>
+					</Center>
 				</AccordionPanel>
 			</AccordionItem>
 		</>
