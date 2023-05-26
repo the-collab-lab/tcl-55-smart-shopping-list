@@ -4,6 +4,7 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import { About } from '../components/About';
 
 import { Heading } from '@chakra-ui/layout';
+import { VisuallyHidden } from '@chakra-ui/visually-hidden';
 
 /**
  * TODO: The links defined in this file don't work!
@@ -20,8 +21,9 @@ export function Layout() {
 			<About isOpen={isOpen} onClose={onClose} />
 			<div className="Layout">
 				<header className="Layout-header">
-					<Heading onClick={onOpen} cursor={'pointer'}>
+					<Heading as="button" onClick={onOpen} cursor={'pointer'}>
 						Smart shopping list
+						<VisuallyHidden>Open about modal</VisuallyHidden>
 					</Heading>
 				</header>
 				<main className="Layout-main">
