@@ -81,7 +81,7 @@ export function Home({ handleListTokenState }) {
 					Create a new list
 				</Button>
 			</Box>
-			<Divider />
+			<Divider borderWidth={'2px'} borderColor="text.500" />
 			<FormControl id="join-list">
 				<form onSubmit={handleFormSubmit}>
 					<Flex
