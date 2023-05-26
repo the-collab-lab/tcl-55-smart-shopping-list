@@ -11,12 +11,18 @@ import {
 	Tab,
 	TabPanels,
 	TabPanel,
+	Accordion,
+	useToast,
+	Box,
 } from '@chakra-ui/react';
+import { CopyIcon } from '@chakra-ui/icons';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 	const [dialogText, setDialogText] = useState('');
+	const successToast = useToast({ variant: 'successToast' });
+	const errorToast = useToast({ variant: 'errorToast' });
 
 	const navigate = useNavigate();
 	const categorizedData = comparePurchaseUrgency(data);
@@ -46,24 +52,23 @@ export function List({ data, listId }) {
 
 	const handleDeleteConfirmation = (result, itemName) => {
 		if (result) {
-			setIsOpen(true);
-			setDialogText(`You have successfully deleted ${itemName}.`);
+			successToast({ title: `You have successfully deleted ${itemName}.` });
 		} else {
-			setIsOpen(true);
-			setDialogText(`Error deleting ${itemName}, please try again .`);
+			errorToast({ title: `Error deleting ${itemName}, please try again .` });
 		}
 	};
 
 	const filterItem = (item, urgency) => {
 		if (item.name.toLowerCase().includes(searchInput.toLowerCase())) {
 			return (
-				<ListItem
-					key={item.id}
-					listId={listId}
-					item={item}
-					urgency={urgency}
-					handleDeleteConfirmation={handleDeleteConfirmation}
-				/>
+				<Accordion key={item.id} allowToggle allowMultiple>
+					<ListItem
+						listId={listId}
+						item={item}
+						urgency={urgency}
+						handleDeleteConfirmation={handleDeleteConfirmation}
+					/>
+				</Accordion>
 			);
 		}
 
@@ -71,10 +76,21 @@ export function List({ data, listId }) {
 	};
 
 	return (
-		<VStack>
-			<Heading>List Luxe</Heading>
+		<VStack m="3em">
+			<Heading mb="0.5em">List Luxe</Heading>
 			<Text>Token:</Text>
-			<Text>{listId}</Text>
+			<Text>
+				{listId}
+				<CopyIcon
+					aria-label="delete"
+					size="sm"
+					_hover={{ cursor: 'pointer' }}
+					ml="0.5em"
+					onClick={() => {
+						navigator.clipboard.writeText(`${listId}`);
+					}}
+				/>
+			</Text>
 			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
@@ -92,7 +108,7 @@ export function List({ data, listId }) {
 			{Object.values(categorizedData).flat().length !== 0 && (
 				<form
 					onSubmit={handleFormSubmit}
-					style={{ display: 'flex', gap: '1rem' }}
+					style={{ display: 'flex', gap: '1em', margin: '1.5em' }}
 				>
 					<label htmlFor="search">Filter Items</label>
 					<input
