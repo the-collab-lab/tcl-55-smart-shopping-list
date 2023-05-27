@@ -22,7 +22,6 @@ import { CopyIcon, CloseIcon } from '@chakra-ui/icons';
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
-	const [dialogText, setDialogText] = useState('');
 	const successToast = useToast({ variant: 'successToast' });
 	const errorToast = useToast({ variant: 'errorToast' });
 
@@ -113,6 +112,7 @@ export function List({ data, listId }) {
 					style={{ display: 'flex', gap: '1em', margin: '1.5em' }}
 				>
 					<InputGroup>
+						<label htmlFor="search">Filter Items</label>
 						<Input
 							id="search"
 							name="search"
@@ -129,9 +129,6 @@ export function List({ data, listId }) {
 					</InputGroup>
 				</form>
 			)}
-			<dialog open={isOpen} style={{ position: 'fixed' }}>
-				{dialogText}
-			</dialog>
 			<Tabs>
 				<TabList>
 					<Tab key="All">All</Tab>
