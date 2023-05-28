@@ -1,5 +1,9 @@
-import { Fragment, useState, useEffect } from 'react';
+
+import { Fragment, useState, useEffect, useRef } from 'react';
 import { comparePurchaseUrgency } from '../api';
+import { Button, IconButton, Text, useDisclosure } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import { AddItem } from '../components/AddItem';
 import { ListItem } from '../components';
 import {
 	Box,
@@ -25,16 +29,11 @@ export function List({ data, listId }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const successToast = useToast({ variant: 'successToast' });
 	const errorToast = useToast({ variant: 'errorToast' });
+	const [dialogText, setDialogText] = useState('');
+	const btnRef = useRef();
+	const { isOpen: isDrawerOpen, onOpen, onClose } = useDisclosure();
 
 	const categorizedData = comparePurchaseUrgency(data);
-
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			setIsOpen(false);
-		}, 1500);
-
-		return () => clearTimeout(timer);
-	}, [isOpen]);
 
 	const handleSearchInput = (e) => {
 		const text = e.target.value;
@@ -81,7 +80,6 @@ export function List({ data, listId }) {
 			<Text>Token:</Text>
 			<Text>
 				{listId}
-
 				<IconButton
 					aria-label="delete"
 					size="sm"
@@ -95,6 +93,35 @@ export function List({ data, listId }) {
 					icon={<CopyIcon />}
 				/>
 			</Text>
+		<>
+			<IconButton
+				aria-label="Add Item"
+				icon={<AddIcon />}
+				onClick={onOpen}
+				position="absolute"
+				top={4}
+				right={4}
+				ref={btnRef}
+				colorScheme="blue"
+				background="soon.500"
+				size="md"
+				borderRadius="3xl"
+			/>
+			<AddItem
+				btnRef={btnRef}
+				data={data}
+				listId={listId}
+				onClose={onClose}
+				isOpen={isDrawerOpen}
+				initialValue={
+					Object.values(categorizedData)
+						.flat()
+						.map((item) => item.name.toLowerCase())
+						.some((str) => str.includes(searchInput.toLowerCase()))
+						? ''
+						: searchInput
+				}
+			/>
 			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
@@ -105,8 +132,8 @@ export function List({ data, listId }) {
 						gap: '1em',
 					}}
 				>
-					<p>Your shopping list is currently empty.</p>
-				</section>
+					<Text>Your shopping list is currently empty.</Text>
+        </section>
 			)}
 			{Object.values(categorizedData).flat().length !== 0 && (
 				<form
