@@ -129,9 +129,20 @@ export function List({ data, listId }) {
 			{data.length > 0 && (
 				<Tabs>
 					<TabList>
-						<Tab key="All">All</Tab>
+						<Tab
+							fontSize={{ base: '12px', lg: '16px' }}
+							_selected={{ bg: 'soon.500' }}
+						>
+							All
+						</Tab>
 						{Object.keys(categorizedData).map((key) => (
-							<Tab key={key}>{key}</Tab>
+							<Tab
+								key={key}
+								fontSize={{ base: '12px', lg: '16px' }}
+								_selected={{ bg: 'soon.500' }}
+							>
+								{key}
+							</Tab>
 						))}
 					</TabList>
 

@@ -55,7 +55,12 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 						_expanded={{ bg: '#DEDFE3', color: '#3B293D' }}
 						_hover={{ bg: '#DEDFE3', color: '#3B293D' }}
 					>
-						<Box as="span" flex="1" textAlign="left">
+						<Box
+							fontSize={{ base: '14px', lg: '16px' }}
+							as="span"
+							flex="1"
+							textAlign="left"
+						>
 							<li className="ListItem" style={{ display: 'block' }}>
 								<Checkbox
 									size="lg"
