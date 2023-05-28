@@ -5,7 +5,12 @@ export function Layout() {
 	const location = useLocation();
 
 	return (
-		<Flex direction="column" p={2} h="100%">
+		<Flex
+			direction="column"
+			p={2}
+			pt={location.pathname === '/' ? 16 : 8}
+			h="100%"
+		>
 			<Center>
 				<Heading size={location.pathname === '/' ? '3xl' : 'xl'}>
 					List Luxe

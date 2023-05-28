@@ -32,7 +32,6 @@ export function Home({ handleListTokenState }) {
 			handleListTokenState(newToken);
 		} else {
 			toast({
-				title: 'Error',
 				description: 'Error adding empty list to Firebase',
 				variant: 'errorToast',
 			});
@@ -44,7 +43,6 @@ export function Home({ handleListTokenState }) {
 		e.preventDefault();
 		if (userEnteredToken.length === 0) {
 			toast({
-				title: 'Error',
 				description: 'Please enter a token.',
 				variant: 'errorToast',
 			});
@@ -53,7 +51,6 @@ export function Home({ handleListTokenState }) {
 		streamListItems(userEnteredToken, (snapshot) => {
 			if (snapshot.empty) {
 				toast({
-					title: 'Error',
 					description: 'List not found. Please try another token.',
 					variant: 'errorToast',
 				});
@@ -132,6 +129,7 @@ export function Home({ handleListTokenState }) {
 			<Image
 				src={'./img/people.svg'}
 				w="80%"
+				maxW="720px"
 				alt="Shoppers at a grocery store enjoying their experience"
 			/>
 		</Flex>
