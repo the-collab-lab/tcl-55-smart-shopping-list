@@ -102,7 +102,11 @@ export function List({ data, listId }) {
 			{Object.values(categorizedData).flat().length !== 0 && (
 				<form
 					onSubmit={handleFormSubmit}
-					style={{ display: 'flex', gap: '1em', margin: '1.5em' }}
+					style={{
+						display: 'flex',
+						gap: '1em',
+						margin: '1.5em',
+					}}
 				>
 					<InputGroup>
 						<Input
