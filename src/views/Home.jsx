@@ -1,20 +1,25 @@
-import { useEffect } from 'react';
 import { useState } from 'react';
 import { generateToken } from '@the-collab-lab/shopping-list-utils';
 import { streamListItems, addItem } from '../api';
-import './Home.css';
+import {
+	Button,
+	Box,
+	Divider,
+	Flex,
+	IconButton,
+	Input,
+	InputGroup,
+	FormControl,
+	FormLabel,
+	InputRightElement,
+	useToast,
+} from '@chakra-ui/react';
+import { Image } from '@chakra-ui/image';
+import { X } from 'feather-icons-react';
 
 export function Home({ handleListTokenState }) {
 	const [userEnteredToken, setUserEnteredToken] = useState('');
-	const [message, setMessage] = useState('');
-
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			setMessage(null);
-		}, 3000);
-
-		return () => clearTimeout(timer);
-	}, [message]);
+	const toast = useToast();
 
 	const handleCreateList = async () => {
 		const newToken = generateToken();
@@ -26,7 +31,10 @@ export function Home({ handleListTokenState }) {
 		if (placeholder) {
 			handleListTokenState(newToken);
 		} else {
-			setMessage('Error adding empty list to Firebase');
+			toast({
+				description: 'Error adding empty list to Firebase',
+				variant: 'errorToast',
+			});
 		}
 	};
 
@@ -34,11 +42,18 @@ export function Home({ handleListTokenState }) {
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		if (userEnteredToken.length === 0) {
-			return setMessage('Please enter a token.');
+			toast({
+				description: 'Please enter a token.',
+				variant: 'errorToast',
+			});
+			return;
 		}
 		streamListItems(userEnteredToken, (snapshot) => {
 			if (snapshot.empty) {
-				setMessage('List not found. Please try another token.');
+				toast({
+					description: 'List not found. Please try another token.',
+					variant: 'errorToast',
+				});
 			} else {
 				handleListTokenState(userEnteredToken);
 			}
@@ -46,40 +61,77 @@ export function Home({ handleListTokenState }) {
 	};
 
 	return (
-		<div
-			className="Home"
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				gap: '1rem',
-			}}
+		<Flex
+			direction="column"
+			h="100%"
+			align="center"
+			justify="space-around"
+			pt={4}
 		>
-			<p>
-				Hello from the home (<code>/</code>) page!
-			</p>
-			<button onClick={handleCreateList}>Create a new list</button>
-
-			<p>or</p>
-			<form
-				onSubmit={handleFormSubmit}
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					gap: '1rem',
-				}}
-			>
-				<label htmlFor="join-list">Join an existing list</label>
-				<input
-					type="text"
-					id="join-list"
-					value={userEnteredToken}
-					onChange={handleChange}
-				/>
-				<button>Join</button>
-				{message && <p>{message}</p>}
-			</form>
-		</div>
+			<Box pb={4}>
+				<Button
+					bg="soon.500"
+					textColor="brand.500"
+					onClick={handleCreateList}
+					fontSize={{ base: 'md', md: 'xl' }}
+				>
+					Create a new list
+				</Button>
+			</Box>
+			<Divider borderWidth={'2px'} borderColor="text.500" />
+			<FormControl id="join-list">
+				<form onSubmit={handleFormSubmit}>
+					<Flex
+						direction="column"
+						align="center"
+						justify="center"
+						gap={2}
+						pt={4}
+					>
+						<FormLabel htmlFor="join-list" fontSize={{ base: 'md', md: 'xl' }}>
+							Join an existing list
+						</FormLabel>
+						<Box>
+							<InputGroup size="md">
+								<Input
+									bg="darkBackground.500"
+									mb={2}
+									type="text"
+									id="join-list"
+									value={userEnteredToken}
+									onChange={handleChange}
+								/>
+								<InputRightElement>
+									<IconButton
+										aria-label="Clear token"
+										icon={<X />}
+										onClick={() => setUserEnteredToken('')}
+										_hover={{ bg: 'none' }}
+										bg="none"
+										display={
+											userEnteredToken.length > 0 ? 'inline-flex' : 'none'
+										}
+									/>
+								</InputRightElement>
+							</InputGroup>
+						</Box>
+						<Button
+							type="submit"
+							bg="soon.500"
+							textColor="brand.500"
+							fontSize={{ base: 'md', md: 'xl' }}
+						>
+							Join
+						</Button>
+					</Flex>
+				</form>
+			</FormControl>
+			<Image
+				src={'./img/people.svg'}
+				w="80%"
+				maxW="720px"
+				alt="Shoppers at a grocery store enjoying their experience"
+			/>
+		</Flex>
 	);
 }
