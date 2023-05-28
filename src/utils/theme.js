@@ -1,6 +1,9 @@
 import { extendTheme } from '@chakra-ui/react';
 
 const theme = extendTheme({
+	config: {
+		initialColorMode: 'dark',
+	},
 	fonts: {
 		heading: 'Playfair Display',
 		body: 'Ysabeau',
@@ -64,6 +67,7 @@ const theme = extendTheme({
 				},
 			},
 		},
+		Button: { variants: { solid: { bg: 'soon.500', color: 'brand.500' } } },
 		Toast: {
 			defaultProps: {
 				position: 'top',

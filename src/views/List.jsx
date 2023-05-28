@@ -1,14 +1,17 @@
-import { Fragment, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import { comparePurchaseUrgency } from '../api';
+import { Button, IconButton, Text, useDisclosure } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import { AddItem } from '../components/AddItem';
 import { ListItem } from '../components';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 	const [dialogText, setDialogText] = useState('');
+	const btnRef = useRef();
+	const { isOpen: isDrawerOpen, onOpen, onClose } = useDisclosure();
 
-	const navigate = useNavigate();
 	const categorizedData = comparePurchaseUrgency(data);
 
 	useEffect(() => {
@@ -29,10 +32,6 @@ export function List({ data, listId }) {
 	};
 
 	const handleFormSubmit = (e) => e.preventDefault();
-
-	const handleFirstItem = () => {
-		navigate('/add-item');
-	};
 
 	const handleDeleteConfirmation = (result, itemName) => {
 		if (result) {
@@ -62,6 +61,34 @@ export function List({ data, listId }) {
 
 	return (
 		<>
+			<IconButton
+				aria-label="Add Item"
+				icon={<AddIcon />}
+				onClick={onOpen}
+				position="absolute"
+				top={4}
+				right={4}
+				ref={btnRef}
+				colorScheme="blue"
+				background="soon.500"
+				size="md"
+				borderRadius="3xl"
+			/>
+			<AddItem
+				btnRef={btnRef}
+				data={data}
+				listId={listId}
+				onClose={onClose}
+				isOpen={isDrawerOpen}
+				initialValue={
+					Object.values(categorizedData)
+						.flat()
+						.map((item) => item.name.toLowerCase())
+						.some((str) => str.includes(searchInput.toLowerCase()))
+						? ''
+						: searchInput
+				}
+			/>
 			{Object.values(categorizedData).flat().length === 0 && (
 				<section
 					style={{
@@ -70,10 +97,10 @@ export function List({ data, listId }) {
 						flexDirection: 'column',
 					}}
 				>
-					<p>Your shopping list is currently empty.</p>
-					<button name="firstItem" onClick={handleFirstItem}>
+					<Text>Your shopping list is currently empty.</Text>
+					<Button name="firstItem" onClick={onOpen}>
 						Add Item
-					</button>
+					</Button>
 				</section>
 			)}
 			{Object.values(categorizedData).flat().length !== 0 && (
@@ -89,7 +116,8 @@ export function List({ data, listId }) {
 						value={searchInput}
 						onChange={handleSearchInput}
 						placeholder="Start typing here..."
-					></input>
+					/>
+
 					{searchInput.length > 0 ? (
 						<button type="reset" name="clear" onClick={handleClear}>
 							Clear Filter

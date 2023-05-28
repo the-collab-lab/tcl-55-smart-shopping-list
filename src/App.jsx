@@ -7,7 +7,7 @@ import {
 	RouterProvider,
 } from 'react-router-dom';
 
-import { AddItem, Home, Layout, List } from './views';
+import { Home, Layout, List } from './views';
 import { getItemData, streamListItems } from './api';
 import { useStateWithStorage } from './utils';
 
@@ -75,16 +75,6 @@ export function App() {
 					element={
 						listToken ? (
 							<List data={data} listId={listToken} />
-						) : (
-							<Navigate to="/" />
-						)
-					}
-				/>
-				<Route
-					path="/add-item"
-					element={
-						listToken ? (
-							<AddItem data={data} listId={listToken} />
 						) : (
 							<Navigate to="/" />
 						)
