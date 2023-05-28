@@ -1,5 +1,3 @@
-import './ListItem.css';
-
 export function ListItemDetails({
 	totalPurchases,
 	lastPurchasedDate,

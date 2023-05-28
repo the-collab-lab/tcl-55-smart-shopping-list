@@ -8,9 +8,13 @@ import {
 } from 'react-router-dom';
 
 import { AddItem, Home, Layout, List } from './views';
-
 import { getItemData, streamListItems } from './api';
 import { useStateWithStorage } from './utils';
+
+import { ChakraProvider } from '@chakra-ui/react';
+import theme from './utils/theme';
+import '@fontsource/playfair-display';
+import '@fontsource/ysabeau';
 
 export function App() {
 	const [data, setData] = useState([]);
@@ -90,5 +94,12 @@ export function App() {
 		),
 	);
 
-	return <RouterProvider router={browserRouter} />;
+	return (
+		<ChakraProvider
+			theme={theme}
+			toastOptions={{ defaultOptions: { position: 'top' } }}
+		>
+			<RouterProvider router={browserRouter} />
+		</ChakraProvider>
+	);
 }
