@@ -7,7 +7,11 @@ const theme = extendTheme({
 	},
 	styles: {
 		global: {
+			'#root': {
+				height: '100%',
+			},
 			'html, body': {
+				height: '100%',
 				bg: 'brand.500',
 				color: 'text.500',
 				scrollbarWidth: 'stable both-edges',
@@ -17,6 +21,9 @@ const theme = extendTheme({
 	colors: {
 		brand: {
 			500: '#3B293D',
+		},
+		darkBackground: {
+			500: '#231825',
 		},
 		overdue: {
 			500: '#CE6A92',

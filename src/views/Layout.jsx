@@ -1,15 +1,24 @@
-import { Box, Center, Heading } from '@chakra-ui/layout';
-import { Outlet } from 'react-router-dom';
+import { Box, Center, Flex, Heading } from '@chakra-ui/layout';
+import { Outlet, useLocation } from 'react-router-dom';
 
 export function Layout() {
+	const location = useLocation();
+
 	return (
-		<Box p={2}>
+		<Flex
+			direction="column"
+			p={2}
+			pt={location.pathname === '/' ? 16 : 8}
+			h="100%"
+		>
 			<Center>
-				<Heading>List Luxe</Heading>
+				<Heading size={location.pathname === '/' ? '3xl' : 'xl'}>
+					List Luxe
+				</Heading>
 			</Center>
-			<Box as="main">
+			<Box as="main" h="100%">
 				<Outlet />
 			</Box>
-		</Box>
+		</Flex>
 	);
 }
