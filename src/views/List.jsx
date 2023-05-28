@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from 'react';
 import { comparePurchaseUrgency } from '../api';
 import { ListItem } from '../components';
 import {
+	Box,
 	VStack,
 	Heading,
 	Text,
@@ -15,6 +16,7 @@ import {
 	InputGroup,
 	Input,
 	InputRightElement,
+	IconButton,
 } from '@chakra-ui/react';
 import { CopyIcon, CloseIcon } from '@chakra-ui/icons';
 
@@ -47,9 +49,13 @@ export function List({ data, listId }) {
 
 	const handleDeleteConfirmation = (result, itemName) => {
 		if (result) {
-			successToast({ title: `You have successfully deleted ${itemName}.` });
+			successToast({
+				description: `You have successfully deleted ${itemName}.`,
+			});
 		} else {
-			errorToast({ title: `Error deleting ${itemName}, please try again .` });
+			errorToast({
+				description: `Error deleting ${itemName}, please try again .`,
+			});
 		}
 	};
 
@@ -71,19 +77,22 @@ export function List({ data, listId }) {
 	};
 
 	return (
-		<VStack m="3em">
-			<Heading mb="0.5em">List Luxe</Heading>
+		<VStack>
 			<Text>Token:</Text>
 			<Text>
 				{listId}
-				<CopyIcon
+
+				<IconButton
 					aria-label="delete"
 					size="sm"
+					bg="none"
 					_hover={{ cursor: 'pointer' }}
 					ml="0.5em"
 					onClick={() => {
 						navigator.clipboard.writeText(`${listId}`);
+						successToast({ description: `Token copied!` });
 					}}
+					icon={<CopyIcon />}
 				/>
 			</Text>
 			{Object.values(categorizedData).flat().length === 0 && (
@@ -127,24 +136,40 @@ export function List({ data, listId }) {
 				</form>
 			)}
 			{data.length > 0 && (
-				<Tabs>
-					<TabList>
-						<Tab
-							fontSize={{ base: '12px', lg: '16px' }}
-							_selected={{ bg: 'soon.500' }}
+				<Tabs
+					sx={{
+						'@media (max-width: 24em)': {
+							w: '100%',
+						},
+					}}
+				>
+					<Box
+						overflow="auto"
+						sx={{
+							scrollbarWidth: 'none',
+							'::-webkit-scrollbar': {
+								display: 'none',
+							},
+						}}
+					>
+						<TabList
+							sx={{
+								'@media (max-width: 24em)': {
+									overflowY: 'hidden',
+									w: 'max-content',
+								},
+							}}
 						>
-							All
-						</Tab>
-						{Object.keys(categorizedData).map((key) => (
-							<Tab
-								key={key}
-								fontSize={{ base: '12px', lg: '16px' }}
-								_selected={{ bg: 'soon.500' }}
-							>
-								{key}
+							<Tab _selected={{ bg: 'soon.500' }} flexShrink={0}>
+								All
 							</Tab>
-						))}
-					</TabList>
+							{Object.keys(categorizedData).map((key) => (
+								<Tab key={key} _selected={{ bg: 'soon.500' }} flexShrink={0}>
+									{key}
+								</Tab>
+							))}
+						</TabList>
+					</Box>
 
 					<TabPanels>
 						<TabPanel>
@@ -154,7 +179,9 @@ export function List({ data, listId }) {
 										item.name.toLowerCase().includes(searchInput.toLowerCase()),
 									).length > 0 && (
 										<>
-											<h2>{key}:</h2>
+											<Heading fontSize="16">
+												<h2>{key}:</h2>
+											</Heading>
 											{categorizedData[key].flatMap((item) =>
 												filterItem(item, key),
 											)}

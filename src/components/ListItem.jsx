@@ -11,6 +11,7 @@ import {
 	Checkbox,
 	useDisclosure,
 	Center,
+	IconButton,
 } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 
@@ -55,12 +56,7 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 						_expanded={{ bg: '#DEDFE3', color: '#3B293D' }}
 						_hover={{ bg: '#DEDFE3', color: '#3B293D' }}
 					>
-						<Box
-							fontSize={{ base: '14px', lg: '16px' }}
-							as="span"
-							flex="1"
-							textAlign="left"
-						>
+						<Box as="span" flex="1" textAlign="left">
 							<li className="ListItem" style={{ display: 'block' }}>
 								<Checkbox
 									size="lg"
@@ -76,15 +72,19 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 								</label>
 							</li>
 						</Box>
-						<DeleteIcon
+
+						<IconButton
 							aria-label="delete"
 							size="sm"
+							bg="none"
 							m="0.5em"
 							onClick={(e) => {
 								e.stopPropagation();
 								onOpen();
 							}}
+							icon={<DeleteIcon />}
 						/>
+
 						<AccordionIcon />
 					</AccordionButton>
 				</h2>
