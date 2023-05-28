@@ -38,25 +38,24 @@ export function AddItem({
 	// function to validate itemName input that returns error messages if any - called onFormSubmit
 	function validateItemInput(data, trimmedItemName) {
 		// 1- checks for empty inputs
+		let isValidInput = true;
 
 		if (!trimmedItemName) {
 			toast({
-				title: 'No item name entered',
 				description: `Please enter an item name.`,
 				variant: 'errorToast',
 			});
-			return false;
+			isValidInput = false;
 		}
 
 		// 2- checks for invalid characters
 
 		if (trimmedItemName.search(/[^a-z0-9'&-\s]/i) !== -1) {
 			toast({
-				title: 'Invalid item name entered',
 				description: `Please only use alphanumeric, ', -, or & characters in your item name.`,
 				variant: 'errorToast',
 			});
-			return false;
+			isValidInput = false;
 		}
 
 		const normalizedItemName = trimmedItemName
@@ -72,13 +71,12 @@ export function AddItem({
 
 		if (potentialMatch) {
 			toast({
-				title: 'Item already on list',
 				description: `You are already tracking ${potentialMatch.name}.`,
 				variant: 'errorToast',
 			});
-			return false;
+			isValidInput = false;
 		}
-		return true;
+		return isValidInput;
 	}
 
 	const onFormSubmit = async (e) => {
@@ -94,7 +92,6 @@ export function AddItem({
 			});
 			if (result) {
 				toast({
-					title: 'Item added',
 					description: `Added ${trimmedItemName} to your list.`,
 					variant: 'successToast',
 				});
@@ -102,7 +99,6 @@ export function AddItem({
 				setTimeframe('7');
 			} else {
 				toast({
-					title: 'Error adding item',
 					description: 'Please try again.',
 					variant: 'errorToast',
 				});
@@ -127,7 +123,7 @@ export function AddItem({
 					<DrawerBody>
 						<form onSubmit={onFormSubmit}>
 							<Flex direction="column" justify="center" gap={4}>
-								<Text htmlFor="itemName">Item Name:</Text>
+								<FormLabel htmlFor="itemName">Item Name:</FormLabel>
 								<Input
 									type="text"
 									id="itemName"
