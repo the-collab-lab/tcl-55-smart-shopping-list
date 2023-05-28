@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api';
 import { ListItem } from '../components';
 import {
@@ -22,11 +21,9 @@ import { CopyIcon, CloseIcon } from '@chakra-ui/icons';
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
-	const [dialogText, setDialogText] = useState('');
 	const successToast = useToast({ variant: 'successToast' });
 	const errorToast = useToast({ variant: 'errorToast' });
 
-	const navigate = useNavigate();
 	const categorizedData = comparePurchaseUrgency(data);
 
 	useEffect(() => {
@@ -47,10 +44,6 @@ export function List({ data, listId }) {
 	};
 
 	const handleFormSubmit = (e) => e.preventDefault();
-
-	const handleFirstItem = () => {
-		navigate('/add-item');
-	};
 
 	const handleDeleteConfirmation = (result, itemName) => {
 		if (result) {
@@ -99,12 +92,11 @@ export function List({ data, listId }) {
 						display: 'flex',
 						alignItems: 'center',
 						flexDirection: 'column',
+						margin: '1.5em',
+						gap: '1em',
 					}}
 				>
 					<p>Your shopping list is currently empty.</p>
-					<button name="firstItem" onClick={handleFirstItem}>
-						Add Item
-					</button>
 				</section>
 			)}
 			{Object.values(categorizedData).flat().length !== 0 && (
@@ -122,56 +114,56 @@ export function List({ data, listId }) {
 							bg="darkBackground.500"
 							color="#DEDFE3"
 						/>
-
+						(
 						<InputRightElement>
-							<CloseIcon onClick={handleClear} />
+							{searchInput.length > 0 && <CloseIcon onClick={handleClear} />}
 						</InputRightElement>
+						)
 					</InputGroup>
 				</form>
 			)}
-			<dialog open={isOpen} style={{ position: 'fixed' }}>
-				{dialogText}
-			</dialog>
-			<Tabs>
-				<TabList>
-					<Tab key="All">All</Tab>
-					{Object.keys(categorizedData).map((key) => (
-						<Tab key={key}>{key}</Tab>
-					))}
-				</TabList>
+			{data.length > 0 && (
+				<Tabs>
+					<TabList>
+						<Tab key="All">All</Tab>
+						{Object.keys(categorizedData).map((key) => (
+							<Tab key={key}>{key}</Tab>
+						))}
+					</TabList>
 
-				<TabPanels>
-					<TabPanel>
+					<TabPanels>
+						<TabPanel>
+							{Object.keys(categorizedData).map((key) => (
+								<Fragment key={key}>
+									{categorizedData[key].filter((item) =>
+										item.name.toLowerCase().includes(searchInput.toLowerCase()),
+									).length > 0 && (
+										<>
+											<h2>{key}:</h2>
+											{categorizedData[key].flatMap((item) =>
+												filterItem(item, key),
+											)}
+										</>
+									)}
+								</Fragment>
+							))}
+						</TabPanel>
 						{Object.keys(categorizedData).map((key) => (
 							<Fragment key={key}>
 								{categorizedData[key].filter((item) =>
 									item.name.toLowerCase().includes(searchInput.toLowerCase()),
 								).length > 0 && (
-									<>
-										<h2>{key}:</h2>
+									<TabPanel>
 										{categorizedData[key].flatMap((item) =>
 											filterItem(item, key),
 										)}
-									</>
+									</TabPanel>
 								)}
 							</Fragment>
 						))}
-					</TabPanel>
-					{Object.keys(categorizedData).map((key) => (
-						<Fragment key={key}>
-							{categorizedData[key].filter((item) =>
-								item.name.toLowerCase().includes(searchInput.toLowerCase()),
-							).length > 0 && (
-								<TabPanel>
-									{categorizedData[key].flatMap((item) =>
-										filterItem(item, key),
-									)}
-								</TabPanel>
-							)}
-						</Fragment>
-					))}
-				</TabPanels>
-			</Tabs>
+					</TabPanels>
+				</Tabs>
+			)}
 		</VStack>
 	);
 }

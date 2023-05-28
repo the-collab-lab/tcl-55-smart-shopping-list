@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { updateItem, deleteItem } from '../api/firebase';
 import { isWithinLastDay } from '../utils/dates';
 import { ListItemDetails } from './ListItemDetails';
@@ -76,7 +75,10 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 							aria-label="delete"
 							size="sm"
 							m="0.5em"
-							onClick={onOpen}
+							onClick={(e) => {
+								e.stopPropagation();
+								onOpen();
+							}}
 						/>
 						<AccordionIcon />
 					</AccordionButton>
