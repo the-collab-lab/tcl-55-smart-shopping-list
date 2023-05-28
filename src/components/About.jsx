@@ -47,12 +47,13 @@ export function About({ isOpen, onClose, ref }) {
 					<DrawerBody>
 						<Flex direction="column" justify="center" gap={4}>
 							<Text>
-								List Luxe is a smart shopping list developed as a part of
-								<Link to="https://the-collab-lab.codes/">The Collab Lab</Link>.
-								List Luxe is an advanced shopping app that optimizes your buying
+								{`List Luxe is a smart shopping list developed as a part of
+								 `}
+								<Link to="https://the-collab-lab.codes/">The Collab Lab</Link>
+								{`. List Luxe is an advanced shopping app that optimizes your buying
 								experience. Utilizing intelligent technology, it learns
-								yourpurchase habits and forecasts when you'll need to
-								re-purchase specific items.
+								your purchase habits and forecasts when you'll need to
+								re-purchase specific items.`}
 							</Text>
 							<Heading as="h3" size="md">
 								Team Members
