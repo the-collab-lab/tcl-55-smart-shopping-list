@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { updateItem, deleteItem } from '../api/firebase';
 import { isWithinLastDay } from '../utils/dates';
 import { ListItemDetails } from './ListItemDetails';
-import './ListItem.css';
 
 export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 	const [showDetails, setShowDetails] = useState(false);
@@ -17,7 +16,7 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 			await updateItem(listId, item);
 		}
 	};
-  
+
 	const handleShowDetails = () => {
 		setShowDetails(!showDetails);
 	};
@@ -28,8 +27,8 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 			handleDeleteConfirmation(result, name);
 		}
 	};
-  
-  const urgencyColors = {
+
+	const urgencyColors = {
 		Overdue: 'purple',
 		Soon: 'red',
 		'Kind Of Soon': 'orange',
@@ -45,9 +44,9 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 					id={`mark-${name}-purchased-id-${id}`}
 					onChange={handlePurchase}
 					checked={isWithinLastDay(item.dateLastPurchased)}
-          style={{
-					  backgroundColor: urgencyColors[urgency],
-				  }}
+					style={{
+						backgroundColor: urgencyColors[urgency],
+					}}
 				/>
 				<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
 				<button

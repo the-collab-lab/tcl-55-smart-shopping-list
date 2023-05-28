@@ -1,32 +1,36 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Box, Center, Flex, Heading, VisuallyHidden } from '@chakra-ui/react';
+import { Outlet, useLocation } from 'react-router-dom';
+import { useDisclosure } from '@chakra-ui/hooks';
 
-/**
- * TODO: The links defined in this file don't work!
- *
- * Instead of anchor element, they should use a component
- * from `react-router-dom` to navigate to the routes
- * defined in `App.jsx`.
- */
+import { About } from '../components/About';
 
 export function Layout() {
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const location = useLocation();
+
 	return (
 		<>
-			<div className="Layout">
-				<header className="Layout-header">
-					<h1>Smart shopping list</h1>
-				</header>
-				<main className="Layout-main">
+			<About isOpen={isOpen} onClose={onClose} />
+			<Flex
+				direction="column"
+				p={2}
+				pt={location.pathname === '/' ? 16 : 8}
+				h="100%"
+			>
+				<Center>
+					<Heading
+						size={location.pathname === '/' ? '3xl' : 'xl'}
+						onClick={onOpen}
+						cursor={'pointer'}
+					>
+						List Luxe
+						<VisuallyHidden>Open about modal</VisuallyHidden>
+					</Heading>
+				</Center>
+				<Box as="main" h="100%">
 					<Outlet />
-				</main>
-				<nav className="Nav">
-					<NavLink to="/" className="Nav-link">
-						Home
-					</NavLink>
-					<NavLink to="/list" className="Nav-link">
-						List
-					</NavLink>
-				</nav>
-			</div>
+				</Box>
+			</Flex>
 		</>
 	);
 }
