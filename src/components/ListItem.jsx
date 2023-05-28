@@ -1,12 +1,24 @@
-import { useState } from 'react';
 import { updateItem, deleteItem } from '../api/firebase';
 import { isWithinLastDay } from '../utils/dates';
 import { ListItemDetails } from './ListItemDetails';
+import { Dialog } from './Dialog';
+import {
+	AccordionItem,
+	AccordionButton,
+	AccordionPanel,
+	AccordionIcon,
+	Box,
+	Checkbox,
+	useDisclosure,
+	Center,
+	IconButton,
+} from '@chakra-ui/react';
+import { DeleteIcon } from '@chakra-ui/icons';
 
 export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
-	const [showDetails, setShowDetails] = useState(false);
 	const { id, name, dateLastPurchased, dateNextPurchased, totalPurchases } =
 		item;
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const lastPurchasedDate = dateLastPurchased?.toDate().toDateString();
 	const nextPurchasedDate = dateNextPurchased?.toDate().toDateString();
@@ -17,62 +29,75 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 		}
 	};
 
-	const handleShowDetails = () => {
-		setShowDetails(!showDetails);
-	};
-
 	const handleDeleteItem = async () => {
-		if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-			const result = await deleteItem(listId, id);
-			handleDeleteConfirmation(result, name);
-		}
+		const result = await deleteItem(listId, id);
+		handleDeleteConfirmation(result, name);
 	};
 
 	const urgencyColors = {
-		Overdue: 'purple',
-		Soon: 'red',
-		'Kind Of Soon': 'orange',
-		'Not Soon': 'yellow',
-		Inactive: 'gray',
+		Overdue: '#CE6A92',
+		Soon: '#5AA1D8',
+		'Kind Of Soon': '#1E5C8B',
+		'Not Soon': '#0D324D',
+		Inactive: '#7C7582',
 	};
 
 	return (
 		<>
-			<li className="ListItem" style={{ display: 'block' }}>
-				<input
-					type="checkbox"
-					id={`mark-${name}-purchased-id-${id}`}
-					onChange={handlePurchase}
-					checked={isWithinLastDay(item.dateLastPurchased)}
-					style={{
-						backgroundColor: urgencyColors[urgency],
-					}}
-				/>
-				<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
-				<button
-					type="button"
-					name="details"
-					onClick={handleShowDetails}
-					style={{ marginLeft: '.5rem' }}
-				>
-					Details
-				</button>
-				<button
-					type="button"
-					name="delete"
-					onClick={handleDeleteItem}
-					style={{ marginLeft: '.5rem' }}
-				>
-					Delete
-				</button>
-				{showDetails && (
-					<ListItemDetails
-						totalPurchases={totalPurchases}
-						lastPurchasedDate={lastPurchasedDate}
-						nextPurchasedDate={nextPurchasedDate}
-					/>
-				)}
-			</li>
+			<Dialog
+				isOpen={isOpen}
+				onClose={onClose}
+				handleDelete={handleDeleteItem}
+				name={name}
+			/>
+			<AccordionItem key={item.id} borderTop="0px" borderBottom="0px">
+				<h2>
+					<AccordionButton
+						_expanded={{ bg: '#DEDFE3', color: '#3B293D' }}
+						_hover={{ bg: '#DEDFE3', color: '#3B293D' }}
+					>
+						<Box as="span" flex="1" textAlign="left">
+							<li className="ListItem" style={{ display: 'block' }}>
+								<Checkbox
+									size="lg"
+									onChange={handlePurchase}
+									isChecked={isWithinLastDay(item.dateLastPurchased)}
+									colorScheme={urgencyColors[urgency]}
+									bg={urgencyColors[urgency]}
+									borderRadius="md"
+									margin="1"
+								></Checkbox>
+								<label htmlFor={`mark-${name}-purchased-id-${id}`}>
+									{name}
+								</label>
+							</li>
+						</Box>
+
+						<IconButton
+							aria-label="delete"
+							size="sm"
+							bg="none"
+							m="0.5em"
+							onClick={(e) => {
+								e.stopPropagation();
+								onOpen();
+							}}
+							icon={<DeleteIcon />}
+						/>
+
+						<AccordionIcon />
+					</AccordionButton>
+				</h2>
+				<AccordionPanel pd={4}>
+					<Center>
+						<ListItemDetails
+							totalPurchases={totalPurchases}
+							lastPurchasedDate={lastPurchasedDate}
+							nextPurchasedDate={nextPurchasedDate}
+						/>
+					</Center>
+				</AccordionPanel>
+			</AccordionItem>
 		</>
 	);
 }
