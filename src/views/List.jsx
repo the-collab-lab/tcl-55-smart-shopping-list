@@ -79,7 +79,7 @@ export function List({ data, listId }) {
 				{listId}
 
 				<IconButton
-					aria-label="delete"
+					aria-label="copy"
 					size="sm"
 					bg="none"
 					_hover={{ cursor: 'pointer' }}
@@ -88,7 +88,7 @@ export function List({ data, listId }) {
 						navigator.clipboard.writeText(`${listId}`);
 						successToast({ description: `Token copied!` });
 					}}
-					icon={<CopyIcon />}
+					icon={<CopyIcon color="text.500" />}
 				/>
 			</Text>
 			<IconButton

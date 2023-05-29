@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { About } from '../components/About';
 
-
 export function Layout() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const location = useLocation();
@@ -27,7 +26,7 @@ export function Layout() {
 						<VisuallyHidden>Open about modal</VisuallyHidden>
 					</Heading>
 				</Center>
-				<Box as="main" h="100%">
+				<Box as="main" h="100%" p={8}>
 					<Outlet />
 				</Box>
 			</Flex>
