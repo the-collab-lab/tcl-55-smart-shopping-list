@@ -1,7 +1,5 @@
-
-import { Fragment, useState, useEffect, useRef } from 'react';
+import { Fragment, useState, useRef } from 'react';
 import { comparePurchaseUrgency } from '../api';
-import { Button, IconButton, Text, useDisclosure } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { AddItem } from '../components/AddItem';
 import { ListItem } from '../components';
@@ -21,15 +19,14 @@ import {
 	Input,
 	InputRightElement,
 	IconButton,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { CopyIcon, CloseIcon } from '@chakra-ui/icons';
 
 export function List({ data, listId }) {
 	const [searchInput, setSearchInput] = useState('');
-	const [isOpen, setIsOpen] = useState(false);
 	const successToast = useToast({ variant: 'successToast' });
 	const errorToast = useToast({ variant: 'errorToast' });
-	const [dialogText, setDialogText] = useState('');
 	const btnRef = useRef();
 	const { isOpen: isDrawerOpen, onOpen, onClose } = useDisclosure();
 
@@ -80,6 +77,7 @@ export function List({ data, listId }) {
 			<Text>Token:</Text>
 			<Text>
 				{listId}
+
 				<IconButton
 					aria-label="delete"
 					size="sm"
@@ -93,7 +91,6 @@ export function List({ data, listId }) {
 					icon={<CopyIcon />}
 				/>
 			</Text>
-		<>
 			<IconButton
 				aria-label="Add Item"
 				icon={<AddIcon />}
@@ -132,8 +129,8 @@ export function List({ data, listId }) {
 						gap: '1em',
 					}}
 				>
-					<Text>Your shopping list is currently empty.</Text>
-        </section>
+					<p>Your shopping list is currently empty.</p>
+				</section>
 			)}
 			{Object.values(categorizedData).flat().length !== 0 && (
 				<form
