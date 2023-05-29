@@ -51,43 +51,49 @@ export function ListItem({ item, listId, handleDeleteConfirmation, urgency }) {
 				name={name}
 			/>
 			<AccordionItem key={item.id} borderTop="0px" borderBottom="0px">
-				<h2>
-					<AccordionButton
-						_expanded={{ bg: '#DEDFE3', color: '#3B293D' }}
-						_hover={{ bg: '#DEDFE3', color: '#3B293D' }}
-					>
-						<Box as="span" flex="1" textAlign="left">
-							<li className="ListItem" style={{ display: 'block' }}>
-								<Checkbox
-									size="lg"
-									onChange={handlePurchase}
-									isChecked={isWithinLastDay(item.dateLastPurchased)}
-									colorScheme={urgencyColors[urgency]}
-									bg={urgencyColors[urgency]}
-									borderRadius="md"
-									margin="1"
-								></Checkbox>
-								<label htmlFor={`mark-${name}-purchased-id-${id}`}>
-									{name}
-								</label>
-							</li>
-						</Box>
+				<AccordionButton
+					color="text.500"
+					_expanded={{
+						bg: 'text.500',
+						color: 'brand.500',
+					}}
+					_hover={{
+						bg: 'text.500',
+						color: 'brand.500',
+					}}
+				>
+					<Box as="span" flex="1" textAlign="left">
+						<li className="ListItem" style={{ display: 'block' }}>
+							<Checkbox
+								size="lg"
+								onChange={handlePurchase}
+								isChecked={isWithinLastDay(item.dateLastPurchased)}
+								colorScheme={urgencyColors[urgency]}
+								bg={urgencyColors[urgency]}
+								borderRadius="md"
+								margin="1"
+							></Checkbox>
+							<label htmlFor={`mark-${name}-purchased-id-${id}`}>{name}</label>
+						</li>
+					</Box>
 
-						<IconButton
-							aria-label="delete"
-							size="sm"
-							bg="none"
-							m="0.5em"
-							onClick={(e) => {
-								e.stopPropagation();
-								onOpen();
-							}}
-							icon={<DeleteIcon />}
-						/>
-
-						<AccordionIcon />
-					</AccordionButton>
-				</h2>
+					<IconButton
+						aria-label="delete"
+						size="sm"
+						m="0.5em"
+						isActive
+						bg="transparent"
+						colorScheme="transparent"
+						color="currentColor"
+						transition="none"
+						onClick={(e) => {
+							e.stopPropagation();
+							onOpen();
+						}}
+						icon={<DeleteIcon />}
+					/>
+					<AccordionIcon />
+				</AccordionButton>
 				<AccordionPanel pd={4}>
 					<Center>
 						<ListItemDetails
