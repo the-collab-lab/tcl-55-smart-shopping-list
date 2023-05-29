@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
 	Box,
 	Drawer,
@@ -17,7 +17,6 @@ import {
 	Flex,
 	Stack,
 	Heading,
-	Text,
 } from '@chakra-ui/react';
 import { addItem } from '../api/firebase';
 
