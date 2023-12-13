@@ -10,6 +10,7 @@ import {
 import { Home, Layout, List } from './views';
 import { getItemData, streamListItems } from './api';
 import { useStateWithStorage } from './utils';
+import { ArchivalNoticeModal } from '@the-collab-lab/shopping-list-utils';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './utils/theme';
@@ -59,7 +60,15 @@ export function App() {
 
 	const browserRouter = createBrowserRouter(
 		createRoutesFromElements(
-			<Route path="/" element={<Layout />}>
+			<Route
+				path="/"
+				element={
+					<>
+						<ArchivalNoticeModal />
+						<Layout />
+					</>
+				}
+			>
 				<Route
 					index
 					element={
